@@ -1,7 +1,7 @@
-package com.cg.orms.dao;
+package com.cg.recruitment.dao;
 
-import com.cg.orms.entities.Login;
-import com.cg.orms.exception.RecruitmentException;
+import com.cg.recruitment.entities.Login;
+import com.cg.recruitment.exception.RecruitmentException;
 
 public interface ILoginDao {
 

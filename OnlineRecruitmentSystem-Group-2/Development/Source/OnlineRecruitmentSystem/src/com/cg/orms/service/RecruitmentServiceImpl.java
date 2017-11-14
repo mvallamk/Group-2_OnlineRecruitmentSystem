@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cg.orms.dao.ILoginDao;
 import com.cg.orms.dao.RecruitmentDAO;
-import com.cg.orms.dao.IUserDao;
 import com.cg.orms.entities.CandidatePersonal;
 import com.cg.orms.entities.CandidateQualifications;
 import com.cg.orms.entities.CandidateWorkHistory;
@@ -17,35 +15,28 @@ import com.cg.orms.entities.Login;
 import com.cg.orms.exception.RecruitmentException;
 
 @Service
-public class RecruitmentServiceImpl implements IRecruitmentService {
-
-	@Autowired
-	ILoginDao loginDAO;
-
-	@Autowired
-	IUserDao userDAO;
-	
+public class RecruitmentServiceImpl implements RecruitmentService {
 	@Autowired
 	RecruitmentDAO recruitmentDAOImpl;
 
 	@Override
 	public Login getLoginDetails(String loginId) throws RecruitmentException {
-		return loginDAO.getLoginDetails(loginId);
+		return recruitmentDAOImpl.getLoginDetails(loginId);
 	}
 
 	@Override
-	public void signUp(Login loginSignup) throws RecruitmentException {
-		loginDAO.signUp(loginSignup);
-
+	public void signUp(Login signupDetails) throws RecruitmentException {
+		recruitmentDAOImpl.signUp(signupDetails);
 	}
 
 	@Override
-	public boolean validateLoginDetails(String loginId, String password) throws RecruitmentException {
+	public boolean validateLoginDetails(String loginId, String password)
+			throws RecruitmentException {
 
-		if (loginDAO.getLoginDetails(loginId) == null)
+		if (recruitmentDAOImpl.getLoginDetails(loginId) == null)
 			return false;
 		else {
-			Login loginDetails = loginDAO.getLoginDetails(loginId);
+			Login loginDetails = recruitmentDAOImpl.getLoginDetails(loginId);
 			if (loginDetails.getPassword().equals(password)) {
 				return true;
 			} else
@@ -54,88 +45,98 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	}
 
 	@Override
-	public void addCandidatePersonalDetails(CandidatePersonal candPers)
+	public void insertCandidatePersonalDetails(
+			CandidatePersonal candidatePersonalDetails)
 			throws RecruitmentException {
-		userDAO.candidPersonal(candPers);
+		recruitmentDAOImpl
+				.insertCandidatePersonalDetails(candidatePersonalDetails);
 	}
 
 	@Override
-	public void addCandidateQualificationDetails(CandidateQualifications candQual)
+	public void insertCandidateQualificationDetails(
+			CandidateQualifications candidateQualificationDetails)
 			throws RecruitmentException {
-		userDAO.candidQualification(candQual);
-
+		recruitmentDAOImpl
+				.insertCandidateQualificationDetails(candidateQualificationDetails);
 	}
 
 	@Override
-	public void addCandidateWorkHistoryDetails(CandidateWorkHistory candHist)
+	public void insertCandidateWorkHistoryDetails(
+			CandidateWorkHistory candidateWorkHistoryDetails)
 			throws RecruitmentException {
-		userDAO.candidWorkHistory(candHist);
-
+		recruitmentDAOImpl
+				.insertCandidateWorkHistoryDetails(candidateWorkHistoryDetails);
 	}
 
 	@Override
-	public CandidatePersonal getCandidatePersonalDetails(String candidateId) throws RecruitmentException {
-		return userDAO.getCandidatePersonalDetails(candidateId);
+	public CandidatePersonal getCandidatePersonalDetails(String candidateId)
+			throws RecruitmentException {
+		return recruitmentDAOImpl.getCandidatePersonalDetails(candidateId);
 	}
 
 	@Override
-	public CandidatePersonal modifycandidPersonal(
-			CandidatePersonal candidatePersonal) throws RecruitmentException {
-
-		return userDAO.modifycandidPersonal(candidatePersonal);
+	public CandidatePersonal modifyCandidatePersonalDetails(
+			CandidatePersonal candidatePersonalDetails)
+			throws RecruitmentException {
+		return recruitmentDAOImpl
+				.modifyCandidatePersonalDetails(candidatePersonalDetails);
 	}
 
 	@Override
 	public CandidateQualifications getCandidateQualificationDetails(
 			String candidateId) throws RecruitmentException {
-
-		return userDAO.getCandidateQualificationDetails(candidateId);
+		return recruitmentDAOImpl.getCandidateQualificationDetails(candidateId);
 	}
 
 	@Override
-	public CandidateQualifications modifycandidQualifications(
-			CandidateQualifications candidateQualifications) throws RecruitmentException {
-
-		return userDAO.modifycandidQualifications(candidateQualifications);
-
+	public CandidateQualifications modifyCandidateQualificationDetails(
+			CandidateQualifications candidateQualificationDetails)
+			throws RecruitmentException {
+		return recruitmentDAOImpl
+				.modifyCandidateQualificationDetails(candidateQualificationDetails);
 	}
 
 	@Override
 	public CandidateWorkHistory getCandidateWorkHistoryDetails(
 			String candidateId) throws RecruitmentException {
-
-		return userDAO.getCandidateWorkHistoryDetails(candidateId);
+		return recruitmentDAOImpl.getCandidateWorkHistoryDetails(candidateId);
 	}
 
 	@Override
-	public CandidateWorkHistory modifycandidWorkHistory(
-			CandidateWorkHistory candidateWorkHistory) throws RecruitmentException {
-
-		return userDAO.modifycandidWorkHistory(candidateWorkHistory);
-	}
-	@Override
-	public void insertApplyJob(JobApplied jobApplied)
+	public CandidateWorkHistory modifyCandidateWorkHistoryDetails(
+			CandidateWorkHistory candidateWorkHistoryDetails)
 			throws RecruitmentException {
-		recruitmentDAOImpl.insertApplyJob(jobApplied);
+		return recruitmentDAOImpl
+				.modifyCandidateWorkHistoryDetails(candidateWorkHistoryDetails);
 	}
-	
-	@Override
-	public List<JobRequirements> getJobByLocation(String loc) {
 
-		return recruitmentDAOImpl.getJobByLocation(loc);
-	}
 	@Override
-	public List<JobRequirements> getJobByExperience(int exp) {
+	public void insertJobApplied(JobApplied jobApplied)
+			throws RecruitmentException {
+		recruitmentDAOImpl.insertJobApplied(jobApplied);
+	}
 
-		return recruitmentDAOImpl.getJobByExperience(exp);
-	}
 	@Override
-	public List<JobRequirements> getJobByPosition(String pos) {
+	public List<JobRequirements> getJobsByLocation(String jobLocation)
+			throws RecruitmentException {
+		return recruitmentDAOImpl.getJobsByLocation(jobLocation);
+	}
 
-		return recruitmentDAOImpl.getJobByPosition(pos);
-	}
 	@Override
-	public List<JobRequirements> getJobByQual(String qual) {
-		return recruitmentDAOImpl.getJobByQual(qual);
+	public List<JobRequirements> getJobsByExperience(int experienceRequired)
+			throws RecruitmentException {
+		return recruitmentDAOImpl.getJobsByExperience(experienceRequired);
+	}
+
+	@Override
+	public List<JobRequirements> getJobsByPosition(String positionRequired)
+			throws RecruitmentException {
+		return recruitmentDAOImpl.getJobsByPosition(positionRequired);
+	}
+
+	@Override
+	public List<JobRequirements> getJobsByQualification(
+			String qualificationRequired) throws RecruitmentException {
+		return recruitmentDAOImpl.getJobsByQualification(qualificationRequired);
 	}
 }
