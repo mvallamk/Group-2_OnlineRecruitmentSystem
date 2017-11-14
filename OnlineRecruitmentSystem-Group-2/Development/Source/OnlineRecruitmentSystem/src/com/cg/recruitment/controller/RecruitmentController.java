@@ -449,7 +449,6 @@ public class RecruitmentController {
 				.parseDate(employmentTo));
 		candidateWorkHistory.setCandidateId(candidateId);
 		service.modifycandidWorkHistory(candidateWorkHistory);
-
 		model.addAttribute("candWork", null);
 		return "modifyresume";
 	}
