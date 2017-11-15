@@ -1,4 +1,4 @@
-# Group-2_OnlineRecruitmentSystem
+# OnlineRecruitmentSystem_Group-2
 
 ABSTRACT OF THE PROJECT
       This project is aimed at developing an Online Recruitment Management System. This system can be used by individual users, 
