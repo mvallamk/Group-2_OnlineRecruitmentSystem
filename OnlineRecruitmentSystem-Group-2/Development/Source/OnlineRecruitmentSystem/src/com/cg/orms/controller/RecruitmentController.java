@@ -22,31 +22,35 @@ import com.cg.orms.entities.JobApplied;
 import com.cg.orms.entities.JobRequirements;
 import com.cg.orms.entities.Login;
 import com.cg.orms.exception.RecruitmentException;
-import com.cg.orms.service.IRecruitmentService;
+import com.cg.orms.service.RecruitmentService;
 import com.cg.orms.util.Constant;
 import com.cg.orms.util.DateUtility;
 
 @Controller
 public class RecruitmentController {
-
-	final String LOGIN = "login";
-	String candidateId = null;
-
 	@Autowired
-	IRecruitmentService service;
+	RecruitmentService service;
+	final String LOGIN = "login";
+	final String MESSAGE = "message";
+	final String ERROR = "error";
+	final String ADDRESUME = "addresume";
+	final String MODIFYRESUME = "modifyresume";
+	final String JOBS = "jobs";
+	final String CANDIDATE = "candidate";
+	final String SIGNUP = "signup";
+	final String USERS = "users";
+	String candidateId = null;
 
 	/**
 	 * From home page when you click on log in user is directed here.
 	 * 
 	 * @param model
-	 * @return LOGIN.html
+	 * @return login
 	 */
 	@RequestMapping("/showloginform.htm")
 	public String showLoginPage(Model model) {
-
 		model.addAttribute(LOGIN, new Login());
 		return LOGIN;
-
 	}
 
 	/**
@@ -62,7 +66,6 @@ public class RecruitmentController {
 		candidateId = null;
 		model.addAttribute(LOGIN, login);
 		return LOGIN;
-
 	}
 
 	/**
@@ -79,30 +82,30 @@ public class RecruitmentController {
 	 */
 	@RequestMapping(value = "/checklogin.htm", method = RequestMethod.POST)
 	public String login(Model model, @RequestParam("loginId") String loginId,
-			@RequestParam("password") String password)
-			throws RecruitmentException {
+			@RequestParam("password") String password) {
 		Login login = new Login();
 		login.setLoginId(loginId);
 		login.setPassword(password);
-
-		if (!service.validateLoginDetails(login.getLoginId(),
-				login.getPassword())) {
-			model.addAttribute("message", "Invalid Login Details");
-			return LOGIN;
-		} else {
-
-			login.setType(service.getLoginDetails(login.getLoginId()).getType());
-			model.addAttribute("loginId", login.getLoginId());
-
-			if ("User".equals(login.getType())) {
-				candidateId = login.getLoginId();
-				return "candidate";
+		try {
+			if (!service.validateLoginDetails(login.getLoginId(),
+					login.getPassword())) {
+				model.addAttribute(MESSAGE, "Invalid Login Details");
+				return LOGIN;
+			} else {
+				login.setType(service.getLoginDetails(login.getLoginId())
+						.getType());
+				model.addAttribute("loginId", login.getLoginId());
+				if ("User".equals(login.getType())) {
+					candidateId = login.getLoginId();
+					return "candidate";
+				} else if ("Company".equals(login.getType()))
+					return "company";
+				else
+					return "admin";
 			}
-
-			else if ("Company".equals(login.getType()))
-				return "company";
-			else
-				return "admin";
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
 		}
 	}
 
@@ -114,10 +117,9 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/showsignupform.htm")
 	public String showsignupPage(Model model) {
-
-		model.addAttribute("typeList", Constant.getUsers());
+		model.addAttribute(USERS, Constant.getUsers());
 		model.addAttribute(LOGIN, new Login());
-		return "signup";
+		return SIGNUP;
 	}
 
 	/**
@@ -134,19 +136,23 @@ public class RecruitmentController {
 	public String signup(Model model,
 			@ModelAttribute(LOGIN) @Valid Login login, BindingResult result) {
 		if (result.hasErrors()) {
-
-			model.addAttribute("typeList", Constant.getUsers());
-			return "signup";
-		} else {
-			try {
-				service.signUp(login);
-			} catch (RecruitmentException e) {
-
-				return "error";
-			}
-
-			return "login";
+			model.addAttribute(USERS, Constant.getUsers());
+			model.addAttribute(LOGIN, new Login());
+			return SIGNUP;
 		}
+		try {
+			if (service.getLoginDetails(login.getLoginId()) != null) {
+				model.addAttribute(USERS, Constant.getUsers());
+				model.addAttribute(LOGIN, new Login());
+				model.addAttribute(MESSAGE, "already taken");
+				return SIGNUP;
+			} else
+				service.signUp(login);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
+		}
+		return LOGIN;
 	}
 
 	/**
@@ -158,22 +164,30 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/addresumeform.htm")
 	public String candidateAddResumeForm(Model model) {
-		return "addresume";
-
+		return ADDRESUME;
 	}
 
 	/**
 	 * When the user clicks on add Personal details in addresume.jsp he is
-	 * redirected here and an object of personal details is sent to addresume.jsp
+	 * redirected here and an object of personal details is sent to
+	 * addresume.jsp
 	 * 
 	 * @param model
 	 * @return addresume.jsp
 	 */
 	@RequestMapping("/addpersonalform.htm")
 	public String addPersonalForm(Model model) {
-		model.addAttribute("candPers", new CandidatePersonal());
-		model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
-		return "addresume";
+
+		try {
+			service.getCandidatePersonalDetails(candidateId);
+			model.addAttribute("candPers", null);
+			model.addAttribute(MESSAGE, "Personal Details already inserted,modify them");
+			return ADDRESUME;
+		} catch (RecruitmentException exception) {
+			model.addAttribute("candPers", new CandidatePersonal());
+			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
+			return ADDRESUME;
+		}
 	}
 
 	/**
@@ -185,22 +199,22 @@ public class RecruitmentController {
 	 * @exception RecruitmentException
 	 * @return addresume.jsp
 	 */
-	@RequestMapping(value = "/savepersonal.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/savepersonal.htm"/* , method = RequestMethod.POST */)
 	public String savePersonal(Model model,
 			@ModelAttribute("candPers") CandidatePersonal candidatePersonal) {
 		try {
 			Date dateFromPage = candidatePersonal.getDob();
 			candidatePersonal.setDob(DateUtility.parseDate(dateFromPage));
-
 			candidatePersonal.setCandidateId(candidateId);
-			service.addCandidatePersonalDetails(candidatePersonal);
-		} catch (RecruitmentException e) {
-			model.addAttribute("error", e.getMessage());
-			return "error";
+			service.insertCandidatePersonalDetails(candidatePersonal);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
 		}
-
 		model.addAttribute("candPers", null);
-		return "addresume";
+		model.addAttribute(MESSAGE,
+				"Personal Details successfully inserted !!!");
+		return ADDRESUME;
 	}
 
 	/**
@@ -214,10 +228,17 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/addqualform.htm")
 	public String addQualificationForm(Model model) {
-		model.addAttribute("qualifications", Constant.getQualifications());
-		model.addAttribute("candQual", new CandidateQualifications());
-		model.addAttribute("currentYear", LocalDate.now().getYear());
-		return "addresume";
+		try {
+			service.getCandidateQualificationDetails(candidateId);
+			model.addAttribute("candQual", null);
+			model.addAttribute(MESSAGE, "Qualification Details already inserted,modify them");
+			return ADDRESUME;
+		} catch (RecruitmentException exception) {
+			model.addAttribute("qualifications", Constant.getQualifications());
+			model.addAttribute("candQual", new CandidateQualifications());
+			model.addAttribute("currentYear", LocalDate.now().getYear());
+			return ADDRESUME;
+		}
 	}
 
 	/**
@@ -233,17 +254,17 @@ public class RecruitmentController {
 	public String savePersonal(
 			Model model,
 			@ModelAttribute("candQual") CandidateQualifications candidateQualifications) {
+		candidateQualifications.setCandidateId(candidateId);
 		try {
-
-			candidateQualifications.setCandidateId(candidateId);
-			service.addCandidateQualificationDetails(candidateQualifications);
-		} catch (RecruitmentException e) {
-			model.addAttribute("error", e.getMessage());
-			return "error";
+			service.insertCandidateQualificationDetails(candidateQualifications);
+			model.addAttribute(MESSAGE,
+					"Qualification Details successfully inserted !!!");
+			model.addAttribute("candQual", null);
+			return ADDRESUME;
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
 		}
-
-		model.addAttribute("candQual", null);
-		return "addresume";
 	}
 
 	/**
@@ -256,10 +277,16 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/addworkform.htm")
 	public String addWorkHistoryForm(Model model) {
-
-		model.addAttribute("candWork", new CandidateWorkHistory());
-		model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
-		return "addresume";
+		try {
+			service.getCandidateWorkHistoryDetails(candidateId);
+			model.addAttribute("candWork", null);
+			model.addAttribute(MESSAGE, "Work History Details already inserted,modify them");
+			return ADDRESUME;
+		} catch (RecruitmentException exception) {
+			model.addAttribute("candWork", new CandidateWorkHistory());
+			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
+			return ADDRESUME;
+		}
 	}
 
 	/**
@@ -275,25 +302,24 @@ public class RecruitmentController {
 	public String saveWorkHistory(
 			Model model,
 			@ModelAttribute("candWork") CandidateWorkHistory candidateWorkHistory) {
+
+		Date employmentFrom = candidateWorkHistory.getEmploymentFrom();
+		Date employmentTo = candidateWorkHistory.getEmploymentTo();
+		candidateWorkHistory.setEmploymentFrom(DateUtility
+				.parseDate(employmentFrom));
+		candidateWorkHistory.setEmploymentTo(DateUtility
+				.parseDate(employmentTo));
+		candidateWorkHistory.setCandidateId(candidateId);
 		try {
-
-			Date employmentFrom = candidateWorkHistory.getEmploymentFrom();
-			Date employmentTo = candidateWorkHistory.getEmploymentTo();
-
-			candidateWorkHistory.setEmploymentFrom(DateUtility
-					.parseDate(employmentFrom));
-			candidateWorkHistory.setEmploymentTo(DateUtility
-					.parseDate(employmentTo));
-			candidateWorkHistory.setCandidateId(candidateId);
-			service.addCandidateWorkHistoryDetails(candidateWorkHistory);
-		} catch (RecruitmentException e) {
-			model.addAttribute("error", e.getMessage());
-			return "error";
+			service.insertCandidateWorkHistoryDetails(candidateWorkHistory);
+			model.addAttribute(MESSAGE,
+					"Work History Details successfully inserted !!!");
+			model.addAttribute("candWork", null);
+			return ADDRESUME;
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
 		}
-
-		model.addAttribute("candQual", null);
-		model.addAttribute("candWork", null);
-		return "addresume";
 	}
 
 	/**
@@ -304,14 +330,11 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/modifyresumeform.htm")
 	public String candidateModifyResumeForm(Model model) {
-
-		return "modifyresume";
-
+		return MODIFYRESUME;
 	}
 
 	@RequestMapping("/backtocandidate.htm")
 	public String backToCandidate(Model model) {
-
 		return "candidate";
 	}
 
@@ -325,14 +348,17 @@ public class RecruitmentController {
 	 * @throws RecruitmentException
 	 */
 	@RequestMapping("/modifypersonalform.htm")
-	public String modifyPersonalForm(Model model) throws RecruitmentException {
-
-		CandidatePersonal candidatePersonal = service
-				.getCandidatePersonalDetails(candidateId);
-		model.addAttribute("candPers", candidatePersonal);
-		model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
-
-		return "modifyresume";
+	public String modifyPersonalForm(Model model) {
+		try {
+			CandidatePersonal candidatePersonal = service
+					.getCandidatePersonalDetails(candidateId);
+			model.addAttribute("candPers", candidatePersonal);
+			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
+		} catch (RecruitmentException exception) {
+			model.addAttribute(MESSAGE, "No Personal details found,add them ");
+			return MODIFYRESUME;
+		}
+		return MODIFYRESUME;
 	}
 
 	/**
@@ -345,18 +371,22 @@ public class RecruitmentController {
 	 * @throws RecruitmentException
 	 */
 	@RequestMapping(value = "/modifypersonal.htm", method = RequestMethod.POST)
-	public String modifyPersonal(Model model,
-			@ModelAttribute("candPers") CandidatePersonal candidatePersonal)
-			throws RecruitmentException {
-		Date dateOfBirth = candidatePersonal.getDob();
-
-		candidatePersonal.setDob(DateUtility.parseDate(dateOfBirth));
-
-		candidatePersonal.setCandidateId(candidateId);
-		service.modifycandidPersonal(candidatePersonal);
-
+	public String modifyPersonal(
+			Model model,
+			@ModelAttribute("candPers") CandidatePersonal candidatePersonalDetails) {
+		Date dateOfBirth = candidatePersonalDetails.getDob();
+		candidatePersonalDetails.setDob(DateUtility.parseDate(dateOfBirth));
+		candidatePersonalDetails.setCandidateId(candidateId);
+		try {
+			service.modifyCandidatePersonalDetails(candidatePersonalDetails);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
+		}
+		model.addAttribute(MESSAGE,
+				"Personal Details successfully modified !!!");
 		model.addAttribute("candPers", null);
-		return "modifyresume";
+		return MODIFYRESUME;
 	}
 
 	/**
@@ -369,16 +399,19 @@ public class RecruitmentController {
 	 * @throws RecruitmentException
 	 */
 	@RequestMapping("/modifyqualform.htm")
-	public String modifyQualificationForm(Model model)
-			throws RecruitmentException {
-
-		CandidateQualifications candidateQualification = service
-				.getCandidateQualificationDetails(candidateId);
-		model.addAttribute("candQual", candidateQualification);
-		model.addAttribute("currentYear", LocalDate.now().getYear());
-		model.addAttribute("qualifications", Constant.getQualifications());
-
-		return "modifyresume";
+	public String modifyQualificationForm(Model model) {
+		try {
+			CandidateQualifications candidateQualification = service
+					.getCandidateQualificationDetails(candidateId);
+			model.addAttribute("candQual", candidateQualification);
+			model.addAttribute("currentYear", LocalDate.now().getYear());
+			model.addAttribute("qualifications", Constant.getQualifications());
+		} catch (RecruitmentException exception) {
+			model.addAttribute(MESSAGE,
+					"No Qualification details found,add them ");
+			return MODIFYRESUME;
+		}
+		return MODIFYRESUME;
 	}
 
 	/**
@@ -394,14 +427,17 @@ public class RecruitmentController {
 	@RequestMapping(value = "/modifyqual.htm", method = RequestMethod.POST)
 	public String modifyQualifications(
 			Model model,
-			@ModelAttribute("candQual") CandidateQualifications candidateQualifications)
-			throws RecruitmentException {
-
-		candidateQualifications.setCandidateId(candidateId);
-		service.modifycandidQualifications(candidateQualifications);
-
+			@ModelAttribute("candQual") CandidateQualifications candidateQualificationDetails) {
+		candidateQualificationDetails.setCandidateId(candidateId);
+		try {
+			service.modifyCandidateQualificationDetails(candidateQualificationDetails);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+		}
+		model.addAttribute(MESSAGE,
+				"Qualification Details successfully modified !!!");
 		model.addAttribute("candQual", null);
-		return "modifyresume";
+		return MODIFYRESUME;
 	}
 
 	/**
@@ -414,14 +450,18 @@ public class RecruitmentController {
 	 * @throws RecruitmentException
 	 */
 	@RequestMapping("/modifyworkhistform.htm")
-	public String modifyWorkHistoryForm(Model model)
-			throws RecruitmentException {
-
-		CandidateWorkHistory candidateWorkHistory = service
-				.getCandidateWorkHistoryDetails(candidateId);
-		model.addAttribute("candWork", candidateWorkHistory);
+	public String modifyWorkHistoryForm(Model model) {
+		try {
+			CandidateWorkHistory candidateWorkHistory = service
+					.getCandidateWorkHistoryDetails(candidateId);
+			model.addAttribute("candWork", candidateWorkHistory);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(MESSAGE,
+					"No Work History details found,add them ");
+			return MODIFYRESUME;
+		}
 		model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
-		return "modifyresume";
+		return MODIFYRESUME;
 	}
 
 	/**
@@ -430,27 +470,31 @@ public class RecruitmentController {
 	 * modifyresume.jsp
 	 * 
 	 * @param model
-	 * @param candidateWorkHistory
+	 * @param candidateWorkHistoryDetails
 	 * @return modifyresume.jsp
 	 * @throws RecruitmentException
 	 */
 	@RequestMapping(value = "/modifyworkhist.htm", method = RequestMethod.POST)
 	public String modifyQualifications(
 			Model model,
-			@ModelAttribute("candWork") CandidateWorkHistory candidateWorkHistory)
-			throws RecruitmentException {
-
-		Date employmentFrom = candidateWorkHistory.getEmploymentFrom();
-		Date employmentTo = candidateWorkHistory.getEmploymentTo();
-
-		candidateWorkHistory.setEmploymentFrom(DateUtility
+			@ModelAttribute("candWork") CandidateWorkHistory candidateWorkHistoryDetails) {
+		Date employmentFrom = candidateWorkHistoryDetails.getEmploymentFrom();
+		Date employmentTo = candidateWorkHistoryDetails.getEmploymentTo();
+		candidateWorkHistoryDetails.setEmploymentFrom(DateUtility
 				.parseDate(employmentFrom));
-		candidateWorkHistory.setEmploymentTo(DateUtility
+		candidateWorkHistoryDetails.setEmploymentTo(DateUtility
 				.parseDate(employmentTo));
-		candidateWorkHistory.setCandidateId(candidateId);
-		service.modifycandidWorkHistory(candidateWorkHistory);
+		candidateWorkHistoryDetails.setCandidateId(candidateId);
+		try {
+			service.modifyCandidateWorkHistoryDetails(candidateWorkHistoryDetails);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
+		}
+		model.addAttribute(MESSAGE,
+				"Work History Details successfully modified !!!");
 		model.addAttribute("candWork", null);
-		return "modifyresume";
+		return MODIFYRESUME;
 	}
 
 	/**
@@ -462,7 +506,6 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/search.htm")
 	public String searchBy(Model model) {
-
 		model.addAttribute("jobRequirements1", new JobRequirements());
 		model.addAttribute("jobRequirements2", new JobRequirements());
 		model.addAttribute("jobRequirements3", new JobRequirements());
@@ -470,7 +513,6 @@ public class RecruitmentController {
 		model.addAttribute("qualifications", Constant.getQualifications());
 		model.addAttribute("cities", Constant.getCities());
 		return "searchjobs";
-
 	}
 
 	/**
@@ -486,11 +528,17 @@ public class RecruitmentController {
 	public String searchByQualification(
 			@ModelAttribute("jobRequirements1") JobRequirements jobRequirements,
 			Model model) {
-		String qualification = jobRequirements.getQualificationRequired();
-		List<JobRequirements> jobs = service.getJobByQual(qualification);
-		model.addAttribute("jobs", jobs);
-		return "jobs";
-
+		String qualificationRequired = jobRequirements
+				.getQualificationRequired();
+		List<JobRequirements> jobs=null;
+		try {
+			jobs = service.getJobsByQualification(qualificationRequired);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
+		}
+		model.addAttribute(JOBS, jobs);
+		return JOBS;
 	}
 
 	/**
@@ -506,10 +554,16 @@ public class RecruitmentController {
 	public String searchByPosition(
 			@ModelAttribute("jobRequirements2") JobRequirements jobRequirements,
 			Model model) {
-		String position = jobRequirements.getPositionRequired();
-		List<JobRequirements> jobs = service.getJobByPosition(position);
-		model.addAttribute("jobs", jobs);
-		return "jobs";
+		String positionRequired = jobRequirements.getPositionRequired();
+		List<JobRequirements> jobs=null;
+		try {
+			jobs = service.getJobsByPosition(positionRequired);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
+		}
+		model.addAttribute(JOBS, jobs);
+		return JOBS;
 
 	}
 
@@ -526,10 +580,16 @@ public class RecruitmentController {
 	public String searchByExperience(
 			@ModelAttribute("jobRequirements3") JobRequirements jobRequirements,
 			Model model) {
-		int experience = jobRequirements.getExperienceRequired();
-		List<JobRequirements> jobs = service.getJobByExperience(experience);
-		model.addAttribute("jobs", jobs);
-		return "jobs";
+		int experienceRequired = jobRequirements.getExperienceRequired();
+		List<JobRequirements> jobs=null;
+		try {
+			jobs = service.getJobsByExperience(experienceRequired);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
+		}
+		model.addAttribute(JOBS, jobs);
+		return JOBS;
 
 	}
 
@@ -546,10 +606,16 @@ public class RecruitmentController {
 	public String searchByLocation(
 			@ModelAttribute("jobRequirements4") JobRequirements jobRequirements,
 			Model model) {
-		String location = jobRequirements.getJobLocation();
-		List<JobRequirements> jobs = service.getJobByLocation(location);
-		model.addAttribute("jobs", jobs);
-		return "jobs";
+		String jobLocation = jobRequirements.getJobLocation();
+		List<JobRequirements> jobs=null;
+		try {
+			jobs = service.getJobsByLocation(jobLocation);
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
+		}
+		model.addAttribute(JOBS, jobs);
+		return JOBS;
 
 	}
 
@@ -566,17 +632,17 @@ public class RecruitmentController {
 	public String applyForJob(@RequestParam("jobID") String jobID,
 			@RequestParam("companyId") String companyId, Model model) {
 		JobApplied jobApplied = new JobApplied();
-		jobApplied.setCandidateId(candidateId);;
+		jobApplied.setCandidateId(candidateId);
 		jobApplied.setJobId(jobID);
 		jobApplied.setCompId(companyId);
-
 		try {
-			service.insertApplyJob(jobApplied);
-			model.addAttribute("message",
+			service.insertJobApplied(jobApplied);
+			model.addAttribute(MESSAGE,
 					"Successfully applied for the job with ID:" + jobID);
-		} catch (RecruitmentException e) {
-			e.printStackTrace();
+		} catch (RecruitmentException exception) {
+			model.addAttribute(ERROR, exception.getMessage());
+			return ERROR;
 		}
-		return "candidate";
+		return CANDIDATE;
 	}
 }

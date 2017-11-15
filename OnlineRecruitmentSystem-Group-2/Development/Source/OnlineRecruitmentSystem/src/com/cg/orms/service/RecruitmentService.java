@@ -1,4 +1,4 @@
-package com.cg.orms.dao;
+package com.cg.orms.service;
 
 import java.util.List;
 
@@ -10,7 +10,9 @@ import com.cg.orms.entities.JobRequirements;
 import com.cg.orms.entities.Login;
 import com.cg.orms.exception.RecruitmentException;
 
-public interface RecruitmentDAO {
+public interface RecruitmentService {
+	
+	public boolean validateLoginDetails(String loginId, String password) throws RecruitmentException;
 
 	/**
 	 * When the user selects search jobs by qualification in searchjobs.jsp,the
@@ -177,5 +179,4 @@ public interface RecruitmentDAO {
 	CandidateWorkHistory modifyCandidateWorkHistoryDetails(
 			CandidateWorkHistory candidateWorkHistoryDetails)
 			throws RecruitmentException;
-
 }

@@ -32,15 +32,19 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * When the user selects search jobs by qualification in searchjobs.jsp,the program 
 	 * is directed here and the list of jobs matching the criteria is fetched from database.
 	 */
-	public List<JobRequirements> getJobByQual(String qual) {
-		TypedQuery<JobRequirements> query = entityManager
-				.createQuery(
-						"select jobRequirements From JobRequirements jobRequirements where jobRequirements.qualificationRequired=:pQual",
-						JobRequirements.class);
-		query.setParameter("pQual", qual);
-		List<JobRequirements> accList = query.getResultList();
-		logger.info("Job list is retrieved successfully by qualification");
-		return accList;
+	public List<JobRequirements> getJobsByQualification(
+			String qualificationRequired) throws RecruitmentException {
+		TypedQuery<JobRequirements> query = entityManager.createQuery(
+				QueryMapper.getJobsByQualificationQuery, JobRequirements.class);
+		query.setParameter("qualificationRequired", qualificationRequired);
+		try {
+			List<JobRequirements> jobs = query.getResultList();
+			logger.info("Job list is retrieved successfully by qualification");
+			return jobs;
+		} catch (Exception exception) {
+			logger.info("Unable to fetch jobs by qualification.");
+			throw new RecruitmentException("Cannot Fetch Jobs.");
+		}
 	}
 
 	@Override
@@ -48,15 +52,19 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * When the user selects search jobs by position in searchjobs.jsp,the program 
 	 * is directed here and the list of jobs matching the criteria is fetched from database.
 	 */
-	public List<JobRequirements> getJobByPosition(String pos) {
-		TypedQuery<JobRequirements> query = entityManager
-				.createQuery(
-						"select jobRequirements From JobRequirements jobRequirements where jobRequirements.positionRequired=:pPos",
-						JobRequirements.class);
-		query.setParameter("pPos", pos);
-		List<JobRequirements> accList = query.getResultList();
-		logger.info("Job list is retrieved successfully by position");
-		return accList;
+	public List<JobRequirements> getJobsByPosition(String positionRequired)
+			throws RecruitmentException {
+		TypedQuery<JobRequirements> query = entityManager.createQuery(
+				QueryMapper.getJobsByPositionQuery, JobRequirements.class);
+		query.setParameter("positionRequired", positionRequired);
+		try {
+			List<JobRequirements> jobs = query.getResultList();
+			logger.info("Job list is retrieved successfully by position");
+			return jobs;
+		} catch (Exception exception) {
+			logger.info("Unable to fetch jobs by position.");
+			throw new RecruitmentException("Cannot Fetch Jobs.");
+		}
 	}
 
 	@Override
@@ -64,15 +72,19 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * When the user selects search jobs by Experience in searchjobs.jsp,the program 
 	 * is directed here and the list of jobs matching the criteria is fetched from database.
 	 */
-	public List<JobRequirements> getJobByExperience(int exp) {
-		TypedQuery<JobRequirements> query = entityManager
-				.createQuery(
-						"select jobRequirements From JobRequirements jobRequirements where jobRequirements.experienceRequired<=:pExp",
-						JobRequirements.class);
-		query.setParameter("pExp", exp);
-		List<JobRequirements> accList = query.getResultList();
-		logger.info("Job list is retrieved successfully by experience");
-		return accList;
+	public List<JobRequirements> getJobsByExperience(int experienceRequired)
+			throws RecruitmentException {
+		TypedQuery<JobRequirements> query = entityManager.createQuery(
+				QueryMapper.getJobsByExperienceQuery, JobRequirements.class);
+		query.setParameter("experienceRequired", experienceRequired);
+		try {
+			List<JobRequirements> jobs = query.getResultList();
+			logger.info("Job list is retrieved successfully by experience");
+			return jobs;
+		} catch (Exception exception) {
+			logger.info("Unable to fetch jobs by experience.");
+			throw new RecruitmentException("Cannot Fetch Jobs.");
+		}
 	}
 
 	@Override
@@ -80,15 +92,19 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * When the user selects search jobs by location in searchjobs.jsp,the program 
 	 * is directed here and the list of jobs matching the criteria is fetched from database.
 	 */
-	public List<JobRequirements> getJobByLocation(String loc) {
-		TypedQuery<JobRequirements> query = entityManager
-				.createQuery(
-						"select jobRequirements From JobRequirements jobRequirements where jobRequirements.jobLocation=:pLoc",
-						JobRequirements.class);
-		query.setParameter("pLoc", loc);
-		List<JobRequirements> accList = query.getResultList();
-		logger.info("Job list is retrieved successfully by location");
-		return accList;
+	public List<JobRequirements> getJobsByLocation(String jobLocation)
+			throws RecruitmentException {
+		TypedQuery<JobRequirements> query = entityManager.createQuery(
+				QueryMapper.getJobsByLocationQuery, JobRequirements.class);
+		query.setParameter("jobLocation", jobLocation);
+		try {
+			List<JobRequirements> jobs = query.getResultList();
+			logger.info("Job list is retrieved successfully by location");
+			return jobs;
+		} catch (Exception exception) {
+			logger.info("Unable to fetch jobs by location.");
+			throw new RecruitmentException("Cannot Fetch Jobs.");
+		}
 	}
 
 	@Override
@@ -96,26 +112,33 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * When the user selects Apply option in jobs.jsp,the program is directed here 
 	 * and the selected job details will be saved into database.
 	 */
-	public void insertApplyJob(JobApplied jobApplied)
+	public void insertJobApplied(JobApplied jobApplied)
 			throws RecruitmentException {
+		try {
+			entityManager.persist(jobApplied);
+			entityManager.flush();
+			logger.info("Job details for the applied jobs are inserted successfully");
+		} catch (Exception exception) {
+			logger.info("Unable to insert job applied");
+			throw new RecruitmentException("Cannot insert job applied");
+		}
 
-		entityManager.persist(jobApplied);
-
-		entityManager.flush();
-		logger.info("Job details for the applied jobs are inserted successfully");
 	}
 
-	@Override
+	
 	/**
 	 * When the user registers with valid credentials,the credentials will be saved
 	 * by this method,but if the user_id is already taken the it throws an exception
 	 * @throws Recruitment Exception
 	 */
-	public void signUp(Login loginSignup) throws RecruitmentException {
+	@Override
+	public void signUp(Login signupDetails) throws RecruitmentException {
 		try {
-			entityManager.persist(loginSignup);
+			entityManager.persist(signupDetails);
 			entityManager.flush();
-		} catch (Exception e) {
+			logger.info("Sign Up details are saved successfully");
+		} catch (Exception exception) {
+			logger.info("sign up unsuccessful");
 			throw new RecruitmentException(
 					"UserId already taken. Try Another Id.");
 		}
@@ -127,10 +150,11 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * @throws recruitment Exception
 	 */
 	public Login getLoginDetails(String loginId) throws RecruitmentException {
-
 		try {
+			logger.info("Fetch operation for login details begins");
 			return entityManager.find(Login.class, loginId);
-		} catch (Exception e) {
+		} catch (Exception exception) {
+			logger.info("Fetch operation for login details unsuccessful");
 			throw new RecruitmentException("Cannot get Login Details");
 		}
 	}
@@ -141,14 +165,15 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * directed here and it if there is some error it throws Recruitment Exception
 	 * @throws recruitment Exception
 	 */
-	public void candidPersonal(CandidatePersonal candPers)
+	public void insertCandidatePersonalDetails(
+			CandidatePersonal candidatePersonalDetails)
 			throws RecruitmentException {
 		try {
-
-			entityManager.persist(candPers);
+			entityManager.persist(candidatePersonalDetails);
 			entityManager.flush();
-		} catch (Exception e) {
-
+			logger.info("Personal details are saved successfully");
+		} catch (Exception exception) {
+			logger.info("Personal details couldn't be saved");
 			throw new RecruitmentException(
 					"Can't insert into candidate Personal");
 		}
@@ -160,15 +185,16 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * directed here and it if there is some error it throws Recruitment Exception
 	 * @throws recruitment Exception
 	 */
-	public void candidQualification(CandidateQualifications candQual)
+	public void insertCandidateQualificationDetails(
+			CandidateQualifications candidateQualificationDetails)
 			throws RecruitmentException {
-		System.out.println(candQual);
+		System.out.println(candidateQualificationDetails);
 		try {
-			entityManager.persist(candQual);
+			entityManager.persist(candidateQualificationDetails);
 			entityManager.flush();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info("Qualification details are saved successfully");
+		} catch (Exception exception) {
+			logger.info("Qualification details couldn't be saved");
 			throw new RecruitmentException(
 					"cant insert into candidate Qualification");
 		}
@@ -181,17 +207,18 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 *   Recruitment Exception
 	 * @throws recruitment Exception
 	 */
-	public void candidWorkHistory(CandidateWorkHistory candHist)
+	public void insertCandidateWorkHistoryDetails(
+			CandidateWorkHistory candidateWorkHistoryDetails)
 			throws RecruitmentException {
 		try {
-			entityManager.persist(candHist);
+			entityManager.persist(candidateWorkHistoryDetails);
 			entityManager.flush();
-		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info("Work History details are saved successfully");
+		} catch (Exception exception) {
+			logger.info("Work History details couldn't be saved");
 			throw new RecruitmentException(
 					"cant insert into candidate Work History");
 		}
-
 	}
 
 	@Override
@@ -207,14 +234,15 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 			TypedQuery<CandidatePersonal> query = entityManager.createQuery(
 					QueryMapper.getCandidatePersonalDetailsQuery,
 					CandidatePersonal.class);
-			query.setParameter("candID", candidateId);
+			query.setParameter("candidateId", candidateId);
 			CandidatePersonal candidate = query.getSingleResult();
+			logger.info("Personal details are retrieved successfully");
 			return candidate;
-		} catch (Exception e) {
+		} catch (Exception exception) {
+			logger.info("Personal details retrieval failed");
 			throw new RecruitmentException(
 					"Cannot Fetch Candidate Personal Details");
 		}
-
 	}
 
 	@Override
@@ -224,11 +252,14 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * if it faces an error it throws recruitment Exception.
 	 * @throws Recruitment Exception
 	 */
-	public CandidatePersonal modifycandidPersonal(
-			CandidatePersonal candidatePersonal) throws RecruitmentException {
+	public CandidatePersonal modifyCandidatePersonalDetails(
+			CandidatePersonal candidatePersonalDetails)
+			throws RecruitmentException {
 		try {
-			return entityManager.merge(candidatePersonal);
-		} catch (Exception e) {
+			logger.info("Personal details modifications begins");
+			return entityManager.merge(candidatePersonalDetails);
+		} catch (Exception exception) {
+			logger.info("Personal details modifications failed");
 			throw new RecruitmentException(
 					"Cannot Modify Candidate Personal Details");
 		}
@@ -246,14 +277,16 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 		try {
 			TypedQuery<CandidateQualifications> query = entityManager
 					.createQuery(
-							"select candidateQualifications From CandidateQualifications candidateQualifications where candidateQualifications.candidateId=:candID",
+							QueryMapper.getCandidateQualificationDetailsQuery,
 							CandidateQualifications.class);
-			query.setParameter("candID", candidateId);
+			query.setParameter("candidateId", candidateId);
 			CandidateQualifications candidate = query.getSingleResult();
+			logger.info("Qualification details retrived successfully");
 			return candidate;
-		} catch (Exception e) {
+		} catch (Exception exception) {
+			logger.info("Qualification details retrieval failed");
 			throw new RecruitmentException(
-					"Cannot Modify Candidate Personal Details");
+					"Cannot fetch Qualification Details");
 		}
 	}
 
@@ -264,14 +297,16 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 * if it faces an error it throws recruitment Exception.
 	 * @throws Recruitment Exception
 	 */
-	public CandidateQualifications modifycandidQualifications(
-			CandidateQualifications candidateQualifications)
+	public CandidateQualifications modifyCandidateQualificationDetails(
+			CandidateQualifications candidateQualificationDetails)
 			throws RecruitmentException {
 		try {
-			return entityManager.merge(candidateQualifications);
-		} catch (Exception e) {
+			logger.info("Qualification details modifications begins");
+			return entityManager.merge(candidateQualificationDetails);
+		} catch (Exception exception) {
+			logger.info("Qualification details modifications failed");
 			throw new RecruitmentException(
-					"Cannot Modify Candidate Personal Details");
+					"Cannot Modify Candidate Qualification Details");
 		}
 	}
 
@@ -286,16 +321,17 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 			String candidateId) throws RecruitmentException {
 
 		try {
-			TypedQuery<CandidateWorkHistory> query = entityManager
-					.createQuery(
-							"select candidateWorkHistory From CandidateWorkHistory candidateWorkHistory where candidateWorkHistory.candidateId=:candID",
-							CandidateWorkHistory.class);
-			query.setParameter("candID", candidateId);
+			TypedQuery<CandidateWorkHistory> query = entityManager.createQuery(
+					QueryMapper.getCandidateWorkHistoryDetailsQuery,
+					CandidateWorkHistory.class);
+			query.setParameter("candidateId", candidateId);
 			CandidateWorkHistory candidate = query.getSingleResult();
+			logger.info("Work History details retrived successfully");
 			return candidate;
-		} catch (Exception e) {
+		} catch (Exception exception) {
+			logger.info("Work History details retrieval failed");
 			throw new RecruitmentException(
-					"Cannot Modify Candidate Personal Details");
+					"Cannot fetch Candidate Work History Details");
 		}
 	}
 
@@ -303,17 +339,19 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	/**
 	 *  When the user makes changes and clicks on save in modify Work History details 
 	 * the program is directed here and the modified details are updated here and
-	 * if it faces an error it throws recruitment Exception.
+	 * if it faces an error it throws Recruitment Exception.
 	 * @throws Recruitment Exception
 	 */
-	public CandidateWorkHistory modifycandidWorkHistory(
-			CandidateWorkHistory candidateWorkHistory)
+	public CandidateWorkHistory modifyCandidateWorkHistoryDetails(
+			CandidateWorkHistory candidateWorkHistoryDetails)
 			throws RecruitmentException {
 		try {
-			return entityManager.merge(candidateWorkHistory);
-		} catch (Exception e) {
+			logger.info("Work History details modifications begins");
+			return entityManager.merge(candidateWorkHistoryDetails);
+		} catch (Exception exception) {
+			logger.info("Work History details modifications failed");
 			throw new RecruitmentException(
-					"Cannot Modify Candidate Personal Details");
+					"Cannot Modify Candidate Work History Details");
 		}
 	}
 

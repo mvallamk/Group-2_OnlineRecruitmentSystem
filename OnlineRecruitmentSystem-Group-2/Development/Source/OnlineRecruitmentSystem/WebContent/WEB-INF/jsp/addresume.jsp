@@ -24,14 +24,14 @@ a.two:hover {
 </head>
 <body background="images/bg1.jpg">
 <center>
-
+<p align="center" style="color: RED">${message}</p>
 	<h1 style="font-size: 300%; text-align: center">Resume</h1>
 
 	<a class="two" href="addpersonalform.htm">Add Personal Details</a>
 
 	<c:if test="${candPers ne null}">
 		<form:form name="personalDetails" action="savepersonal.htm"
-			modelAttribute="candPers" method="post">
+			modelAttribute="candPers" >
 			<table bgcolor="#E4E47C" align="center" border="1">
 				<tr>
 					<td><form:label path="candidateName">Name</form:label></td>

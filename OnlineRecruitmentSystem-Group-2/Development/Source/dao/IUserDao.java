@@ -1,9 +1,9 @@
-package com.cg.orms.dao;
+package com.cg.recruitment.dao;
 
-import com.cg.orms.entities.CandidatePersonal;
-import com.cg.orms.entities.CandidateQualifications;
-import com.cg.orms.entities.CandidateWorkHistory;
-import com.cg.orms.exception.RecruitmentException;
+import com.cg.recruitment.entities.CandidatePersonal;
+import com.cg.recruitment.entities.CandidateQualifications;
+import com.cg.recruitment.entities.CandidateWorkHistory;
+import com.cg.recruitment.exception.RecruitmentException;
 
 public interface IUserDao {
 

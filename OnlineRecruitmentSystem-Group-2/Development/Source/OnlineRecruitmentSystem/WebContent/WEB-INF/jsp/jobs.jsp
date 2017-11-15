@@ -17,36 +17,44 @@ a.two:hover {
 </style>
 </head>
 <body background="images/bg1.jpg">
-	<center>
-		<h2>The jobs that matched your criteria</h2>
-		<table>
-			<tr>
-				<th>Job ID</th>
-				<th>Company Id</th>
-				<th>Position Required</th>
-				<th>Number Required</th>
-				<th>Experience Required</th>
-				<th>Qualification Required</th>
-				<th>Job Location</th>
-				<th>Job Description</th>
-				<c:forEach items="${jobs}" var="job">
-					<tr>
-						<td>${job.jobID}</td>
-						<td>${job.companyId}</td>
-						<td>${job.positionRequired}</td>
-						<td>${job.numberRequired}</td>
-						<td>${job.experienceRequired}</td>
-						<td>${job.qualificationRequired}</td>
-						<td>${job.jobLocation}</td>
-						<td>${job.jobDescription}</td>
-						<td><a
-							href="apply.htm?jobID=${job.jobID}&&companyId=${job.companyId}">Apply</a></td>
-					</tr>
-				</c:forEach>
-		</table>
-	</center>
+	<c:if test="${jobs[0] eq null}">
+		<center>
+			<h2>No jobs matched your criteria</h2>
+		</center>
+	</c:if>
+	<c:if test="${jobs[0] ne null}">
+		<center>
+			<h2>The jobs that matched your criteria</h2>
+			<table>
+				<tr>
+					<th>Job ID</th>
+					<th>Company Id</th>
+					<th>Position Required</th>
+					<th>Number Required</th>
+					<th>Experience Required</th>
+					<th>Qualification Required</th>
+					<th>Job Location</th>
+					<th>Job Description</th>
+					<c:forEach items="${jobs}" var="job">
+						<tr>
+							<td>${job.jobID}</td>
+							<td>${job.companyId}</td>
+							<td>${job.positionRequired}</td>
+							<td>${job.numberRequired}</td>
+							<td>${job.experienceRequired}</td>
+							<td>${job.qualificationRequired}</td>
+							<td>${job.jobLocation}</td>
+							<td>${job.jobDescription}</td>
+							<td><a
+								href="apply.htm?jobID=${job.jobID}&&companyId=${job.companyId}">Apply</a></td>
+						</tr>
+					</c:forEach>
+			</table>
+		</center>
+	</c:if>
 	<h3>
-		<a class="two" href="signout.htm">Sign Out</a>
+		<a class="two" href="backtocandidate.htm">Home</a> <a class="two"
+			href="signout.htm">Sign Out</a>
 	</h3>
 </body>
 </html>

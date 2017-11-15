@@ -24,7 +24,7 @@ a.two:hover {
 </head>
 <body background="images/bg1.jpg">
 	<center>
-
+	<p align="center" style="color: RED">${message}</p>
 		<h1 style="font-size: 300%; text-align: center">Resume</h1>
 
 		<a class="two" href="modifypersonalform.htm">Modify Personal

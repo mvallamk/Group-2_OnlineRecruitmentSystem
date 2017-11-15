@@ -23,7 +23,7 @@ a.two:hover {font-size:150%;}
 				<td>Signup as</td>
 				<td><form:select path="type">
 						<form:option value="" label="Please Select" />
-						<form:options items="${typeList}" />
+						<form:options items="${users}" />
 					</form:select></td>
 				<td style="color: RED"><form:errors path="type" /></td>
 			</tr>
