@@ -11,15 +11,15 @@ Individual user should be able to login to the system and perform the following
         
 Functionality
 
-	Home page screen: 
+  Home page screen: 
       Home page for the online Recruitment Management System which provides a link for the login and signup pages.
 	Login Screen: 
       Allows the valid user to login to the system and display the main options screen.
   Signup Screen:
       Allows the user to register.
-	Add Resume: 
+  Add Resume: 
      For the individual user, this screen shows the form in which resume details are required to be entered.
-	Update Resume:
+  Update Resume:
       This screen shows the existing resume details to the individual user to update existing resume.
   Search jobs :
       This screen allows the individual user to search for jobs based on different criteria.
