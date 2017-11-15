@@ -1,13 +1,13 @@
 package com.cg.orms.test;
 
 import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import com.cg.orms.dao.ILoginDao;
-import com.cg.orms.service.IRecruitmentService;
 import com.cg.orms.service.RecruitmentServiceImpl;
 
-@RunWith(MockitoJUnitRunner.class)
+
 public class RecruitmentServiceImplTest {
 	@Mock
 	private ILoginDao loginDaoImpl;
