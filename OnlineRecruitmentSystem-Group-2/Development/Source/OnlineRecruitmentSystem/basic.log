@@ -6,3 +6,9 @@
 2017-11-15-main-INFO -org.hibernate.jpa.boot.internal.PersistenceXmlParser:HHH000318: Could not find any META-INF/persistence.xml file in the classpath
 2017-11-15-main-INFO -org.hibernate.jpa.boot.internal.PersistenceXmlParser:HHH000318: Could not find any META-INF/persistence.xml file in the classpath
 2017-11-15-main-INFO -org.hibernate.jpa.boot.internal.PersistenceXmlParser:HHH000318: Could not find any META-INF/persistence.xml file in the classpath
+2017-11-15-main-INFO -com.cg.orms.dao.RecruitmentDAOImpl:Fetch operation for login details begins
+2017-11-15-main-INFO -com.cg.orms.dao.RecruitmentDAOImpl:Fetch operation for login details begins
+2017-11-15-main-INFO -com.cg.orms.dao.RecruitmentDAOImpl:Fetch operation for login details begins
+2017-11-15-main-INFO -com.cg.orms.dao.RecruitmentDAOImpl:Fetch operation for login details begins
+2017-11-15-main-INFO -com.cg.orms.dao.RecruitmentDAOImpl:Fetch operation for login details unsuccessful
+2017-11-15-main-INFO -com.cg.orms.dao.RecruitmentDAOImpl:Fetch operation for login details begins
