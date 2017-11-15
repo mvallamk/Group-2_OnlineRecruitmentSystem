@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
 	<context:annotation-config />
-	<context:component-scan base-package="com.cg.recruitment"/>
+	<context:component-scan base-package="com.cg.orms"/>
 	
 	 <!-- This bean is required to load ORM persistence and related annotations -->
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
@@ -24,7 +24,7 @@
 	
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
           <property name="dataSource" ref="dataSource"/>
-          <property name="packagesToScan" value="com.cg.recruitment.entities"/>
+          <property name="packagesToScan" value="com.cg.orms.entities"/>
           <property name="persistenceProviderClass" value="org.hibernate.jpa.HibernatePersistenceProvider"/>
           <property name="jpaPropertyMap">
               <map>
