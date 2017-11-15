@@ -17,7 +17,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.cg.orms.dao.RecruitmentDAO;
 import com.cg.orms.dao.RecruitmentDAOImpl;
-import com.cg.orms.entities.CandidatePersonal;
 import com.cg.orms.entities.Login;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -50,19 +49,4 @@ public class RecruitmentDAOTest {
 		assertEquals(testLogin, recruitmentDAOImpl.getLoginDetails(loginId));
 		verify(entityManager).find(Login.class, loginId);
 	}
-
-	@Test
-	public void testModifyCandidatePersonalDetails() throws Exception {
-		String candidateId = "manoj10987";
-		CandidatePersonal candidatePersonal = new CandidatePersonal();
-		candidatePersonal.setCandidateId(candidateId);
-		Mockito.when(entityManager.find(CandidatePersonal.class, candidateId))
-				.thenReturn(candidatePersonal);
-		CandidatePersonal testCandidatePersonal = recruitmentDAOImpl
-				.getCandidatePersonalDetails(candidateId);
-		assertEquals(candidatePersonal, testCandidatePersonal);
-		verify(entityManager).find(CandidatePersonal.class, candidateId);
-	}
-	
-	
 }
