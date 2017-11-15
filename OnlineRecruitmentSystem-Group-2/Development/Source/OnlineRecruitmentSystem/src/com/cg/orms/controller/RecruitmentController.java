@@ -157,8 +157,8 @@ public class RecruitmentController {
 				model.addAttribute(LOGIN, new Login());
 				model.addAttribute(MESSAGE, "UserId Already Taken");
 				return SIGNUP;
-			} else
-				service.signUp(login);
+			}
+			service.signUp(login);
 		} catch (RecruitmentException exception) {
 			model.addAttribute(ERROR, exception.getMessage());
 			return ERROR;
