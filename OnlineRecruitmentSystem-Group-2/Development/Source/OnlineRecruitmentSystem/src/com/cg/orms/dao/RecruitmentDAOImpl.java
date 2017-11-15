@@ -122,7 +122,6 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 			logger.info("Unable to insert job applied");
 			throw new RecruitmentException("Cannot insert job applied");
 		}
-
 	}
 
 	
@@ -354,5 +353,4 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 					"Cannot Modify Candidate Work History Details");
 		}
 	}
-
 }

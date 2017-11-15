@@ -39,9 +39,18 @@ public class RecruitmentController {
 	final String CANDIDATE = "candidate";
 	final String SIGNUP = "signup";
 	final String USERS = "users";
+	final String CANDIDATE_PERSONAL_DETAILS="candPers";
+	final String CANDIDATE_QUALIFICATION_DETAILS="candQual";
+	final String CANDIDATE_WORK_HISTORY_DETAILS="candWork";
+	final String JOB_REQUIREMENTS_BY_QUALIFICATION="jobRequirements1";
+	final String JOB_REQUIREMENTS_BY_LOCATION="jobRequirements2";
+	final String JOB_REQUIREMENTS_BY_POSITION="jobRequirements3";
+	final String JOB_REQUIREMENTS_BY_EXPERIENCE="jobRequirements4";
 	String candidateId = null;
 
 	/**
+	 * <p>shows login form to the user</p>
+	 * 
 	 * From home page when you click on log in user is directed here.
 	 * 
 	 * @param model
@@ -54,6 +63,8 @@ public class RecruitmentController {
 	}
 
 	/**
+	 * <p>signs out user</p> 
+	 * 
 	 * When ever user selects Sign out he will be directed here
 	 * 
 	 * @param model
@@ -144,7 +155,7 @@ public class RecruitmentController {
 			if (service.getLoginDetails(login.getLoginId()) != null) {
 				model.addAttribute(USERS, Constant.getUsers());
 				model.addAttribute(LOGIN, new Login());
-				model.addAttribute(MESSAGE, "already taken");
+				model.addAttribute(MESSAGE, "UserId Already Taken");
 				return SIGNUP;
 			} else
 				service.signUp(login);
@@ -156,6 +167,8 @@ public class RecruitmentController {
 	}
 
 	/**
+	 * <p>shows add resume form to candidate<p>x
+	 * 
 	 * When the user selects add resume from candidate.jsp the page is
 	 * redirected to addresume.jsp
 	 * 
@@ -163,7 +176,7 @@ public class RecruitmentController {
 	 * @return addresume.jsp
 	 */
 	@RequestMapping("/addresumeform.htm")
-	public String candidateAddResumeForm(Model model) {
+	public String showCandidateAddResumeForm(Model model) {
 		return ADDRESUME;
 	}
 
@@ -180,11 +193,11 @@ public class RecruitmentController {
 
 		try {
 			service.getCandidatePersonalDetails(candidateId);
-			model.addAttribute("candPers", null);
+			model.addAttribute(CANDIDATE_PERSONAL_DETAILS, null);
 			model.addAttribute(MESSAGE, "Personal Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
-			model.addAttribute("candPers", new CandidatePersonal());
+			model.addAttribute(CANDIDATE_PERSONAL_DETAILS, new CandidatePersonal());
 			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
 			return ADDRESUME;
 		}
@@ -200,8 +213,8 @@ public class RecruitmentController {
 	 * @return addresume.jsp
 	 */
 	@RequestMapping(value = "/savepersonal.htm"/* , method = RequestMethod.POST */)
-	public String savePersonal(Model model,
-			@ModelAttribute("candPers") CandidatePersonal candidatePersonal) {
+	public String savePersonalDetails(Model model,
+			@ModelAttribute(CANDIDATE_PERSONAL_DETAILS) CandidatePersonal candidatePersonal) {
 		try {
 			Date dateFromPage = candidatePersonal.getDob();
 			candidatePersonal.setDob(DateUtility.parseDate(dateFromPage));
@@ -211,7 +224,7 @@ public class RecruitmentController {
 			model.addAttribute(ERROR, exception.getMessage());
 			return ERROR;
 		}
-		model.addAttribute("candPers", null);
+		model.addAttribute(CANDIDATE_PERSONAL_DETAILS, null);
 		model.addAttribute(MESSAGE,
 				"Personal Details successfully inserted !!!");
 		return ADDRESUME;
@@ -227,15 +240,15 @@ public class RecruitmentController {
 	 * @return addresume.jsp
 	 */
 	@RequestMapping("/addqualform.htm")
-	public String addQualificationForm(Model model) {
+	public String showAddQualificationForm(Model model) {
 		try {
 			service.getCandidateQualificationDetails(candidateId);
-			model.addAttribute("candQual", null);
+			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS, null);
 			model.addAttribute(MESSAGE, "Qualification Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
 			model.addAttribute("qualifications", Constant.getQualifications());
-			model.addAttribute("candQual", new CandidateQualifications());
+			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS, new CandidateQualifications());
 			model.addAttribute("currentYear", LocalDate.now().getYear());
 			return ADDRESUME;
 		}
@@ -251,15 +264,15 @@ public class RecruitmentController {
 	 * @return addresume.jsp
 	 */
 	@RequestMapping(value = "/savequal.htm", method = RequestMethod.POST)
-	public String savePersonal(
+	public String saveQualificationDetails(
 			Model model,
-			@ModelAttribute("candQual") CandidateQualifications candidateQualifications) {
+			@ModelAttribute(CANDIDATE_QUALIFICATION_DETAILS) CandidateQualifications candidateQualifications) {
 		candidateQualifications.setCandidateId(candidateId);
 		try {
 			service.insertCandidateQualificationDetails(candidateQualifications);
 			model.addAttribute(MESSAGE,
 					"Qualification Details successfully inserted !!!");
-			model.addAttribute("candQual", null);
+			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS, null);
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
 			model.addAttribute(ERROR, exception.getMessage());
@@ -276,14 +289,14 @@ public class RecruitmentController {
 	 * @return addresume.jsp
 	 */
 	@RequestMapping("/addworkform.htm")
-	public String addWorkHistoryForm(Model model) {
+	public String showAddWorkHistoryForm(Model model) {
 		try {
 			service.getCandidateWorkHistoryDetails(candidateId);
-			model.addAttribute("candWork", null);
+			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS, null);
 			model.addAttribute(MESSAGE, "Work History Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
-			model.addAttribute("candWork", new CandidateWorkHistory());
+			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS, new CandidateWorkHistory());
 			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
 			return ADDRESUME;
 		}
@@ -299,10 +312,9 @@ public class RecruitmentController {
 	 * @return addresume.jsp
 	 */
 	@RequestMapping(value = "/saveworkhist.htm", method = RequestMethod.POST)
-	public String saveWorkHistory(
+	public String saveWorkHistoryDetails(
 			Model model,
-			@ModelAttribute("candWork") CandidateWorkHistory candidateWorkHistory) {
-
+			@ModelAttribute(CANDIDATE_WORK_HISTORY_DETAILS) CandidateWorkHistory candidateWorkHistory) {
 		Date employmentFrom = candidateWorkHistory.getEmploymentFrom();
 		Date employmentTo = candidateWorkHistory.getEmploymentTo();
 		candidateWorkHistory.setEmploymentFrom(DateUtility
@@ -314,7 +326,7 @@ public class RecruitmentController {
 			service.insertCandidateWorkHistoryDetails(candidateWorkHistory);
 			model.addAttribute(MESSAGE,
 					"Work History Details successfully inserted !!!");
-			model.addAttribute("candWork", null);
+			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS, null);
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
 			model.addAttribute(ERROR, exception.getMessage());
@@ -329,7 +341,7 @@ public class RecruitmentController {
 	 * @return modifyresume.jsp
 	 */
 	@RequestMapping("/modifyresumeform.htm")
-	public String candidateModifyResumeForm(Model model) {
+	public String showCandidateModifyResumeForm(Model model) {
 		return MODIFYRESUME;
 	}
 
@@ -352,7 +364,7 @@ public class RecruitmentController {
 		try {
 			CandidatePersonal candidatePersonal = service
 					.getCandidatePersonalDetails(candidateId);
-			model.addAttribute("candPers", candidatePersonal);
+			model.addAttribute(CANDIDATE_PERSONAL_DETAILS, candidatePersonal);
 			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
 		} catch (RecruitmentException exception) {
 			model.addAttribute(MESSAGE, "No Personal details found,add them ");
@@ -373,7 +385,7 @@ public class RecruitmentController {
 	@RequestMapping(value = "/modifypersonal.htm", method = RequestMethod.POST)
 	public String modifyPersonal(
 			Model model,
-			@ModelAttribute("candPers") CandidatePersonal candidatePersonalDetails) {
+			@ModelAttribute(CANDIDATE_PERSONAL_DETAILS) CandidatePersonal candidatePersonalDetails) {
 		Date dateOfBirth = candidatePersonalDetails.getDob();
 		candidatePersonalDetails.setDob(DateUtility.parseDate(dateOfBirth));
 		candidatePersonalDetails.setCandidateId(candidateId);
@@ -385,7 +397,7 @@ public class RecruitmentController {
 		}
 		model.addAttribute(MESSAGE,
 				"Personal Details successfully modified !!!");
-		model.addAttribute("candPers", null);
+		model.addAttribute(CANDIDATE_PERSONAL_DETAILS, null);
 		return MODIFYRESUME;
 	}
 
@@ -403,7 +415,7 @@ public class RecruitmentController {
 		try {
 			CandidateQualifications candidateQualification = service
 					.getCandidateQualificationDetails(candidateId);
-			model.addAttribute("candQual", candidateQualification);
+			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS, candidateQualification);
 			model.addAttribute("currentYear", LocalDate.now().getYear());
 			model.addAttribute("qualifications", Constant.getQualifications());
 		} catch (RecruitmentException exception) {
@@ -427,7 +439,7 @@ public class RecruitmentController {
 	@RequestMapping(value = "/modifyqual.htm", method = RequestMethod.POST)
 	public String modifyQualifications(
 			Model model,
-			@ModelAttribute("candQual") CandidateQualifications candidateQualificationDetails) {
+			@ModelAttribute(CANDIDATE_QUALIFICATION_DETAILS) CandidateQualifications candidateQualificationDetails) {
 		candidateQualificationDetails.setCandidateId(candidateId);
 		try {
 			service.modifyCandidateQualificationDetails(candidateQualificationDetails);
@@ -436,7 +448,7 @@ public class RecruitmentController {
 		}
 		model.addAttribute(MESSAGE,
 				"Qualification Details successfully modified !!!");
-		model.addAttribute("candQual", null);
+		model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS, null);
 		return MODIFYRESUME;
 	}
 
@@ -454,7 +466,7 @@ public class RecruitmentController {
 		try {
 			CandidateWorkHistory candidateWorkHistory = service
 					.getCandidateWorkHistoryDetails(candidateId);
-			model.addAttribute("candWork", candidateWorkHistory);
+			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS, candidateWorkHistory);
 		} catch (RecruitmentException exception) {
 			model.addAttribute(MESSAGE,
 					"No Work History details found,add them ");
@@ -477,7 +489,7 @@ public class RecruitmentController {
 	@RequestMapping(value = "/modifyworkhist.htm", method = RequestMethod.POST)
 	public String modifyQualifications(
 			Model model,
-			@ModelAttribute("candWork") CandidateWorkHistory candidateWorkHistoryDetails) {
+			@ModelAttribute(CANDIDATE_WORK_HISTORY_DETAILS) CandidateWorkHistory candidateWorkHistoryDetails) {
 		Date employmentFrom = candidateWorkHistoryDetails.getEmploymentFrom();
 		Date employmentTo = candidateWorkHistoryDetails.getEmploymentTo();
 		candidateWorkHistoryDetails.setEmploymentFrom(DateUtility
@@ -493,7 +505,7 @@ public class RecruitmentController {
 		}
 		model.addAttribute(MESSAGE,
 				"Work History Details successfully modified !!!");
-		model.addAttribute("candWork", null);
+		model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS, null);
 		return MODIFYRESUME;
 	}
 
@@ -506,10 +518,10 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/search.htm")
 	public String searchBy(Model model) {
-		model.addAttribute("jobRequirements1", new JobRequirements());
-		model.addAttribute("jobRequirements2", new JobRequirements());
-		model.addAttribute("jobRequirements3", new JobRequirements());
-		model.addAttribute("jobRequirements4", new JobRequirements());
+		model.addAttribute(JOB_REQUIREMENTS_BY_QUALIFICATION, new JobRequirements());
+		model.addAttribute(JOB_REQUIREMENTS_BY_POSITION, new JobRequirements());
+		model.addAttribute(JOB_REQUIREMENTS_BY_EXPERIENCE, new JobRequirements());
+		model.addAttribute(JOB_REQUIREMENTS_BY_LOCATION, new JobRequirements());
 		model.addAttribute("qualifications", Constant.getQualifications());
 		model.addAttribute("cities", Constant.getCities());
 		return "searchjobs";
@@ -526,7 +538,7 @@ public class RecruitmentController {
 	 */
 	@RequestMapping(value = "/byqualification.htm", method = RequestMethod.POST)
 	public String searchByQualification(
-			@ModelAttribute("jobRequirements1") JobRequirements jobRequirements,
+			@ModelAttribute(JOB_REQUIREMENTS_BY_QUALIFICATION) JobRequirements jobRequirements,
 			Model model) {
 		String qualificationRequired = jobRequirements
 				.getQualificationRequired();
@@ -552,7 +564,7 @@ public class RecruitmentController {
 	 */
 	@RequestMapping(value = "/byposition.htm", method = RequestMethod.POST)
 	public String searchByPosition(
-			@ModelAttribute("jobRequirements2") JobRequirements jobRequirements,
+			@ModelAttribute(JOB_REQUIREMENTS_BY_POSITION) JobRequirements jobRequirements,
 			Model model) {
 		String positionRequired = jobRequirements.getPositionRequired();
 		List<JobRequirements> jobs=null;
@@ -578,7 +590,7 @@ public class RecruitmentController {
 	 */
 	@RequestMapping(value = "/byexperience.htm", method = RequestMethod.POST)
 	public String searchByExperience(
-			@ModelAttribute("jobRequirements3") JobRequirements jobRequirements,
+			@ModelAttribute(JOB_REQUIREMENTS_BY_EXPERIENCE) JobRequirements jobRequirements,
 			Model model) {
 		int experienceRequired = jobRequirements.getExperienceRequired();
 		List<JobRequirements> jobs=null;
@@ -590,7 +602,6 @@ public class RecruitmentController {
 		}
 		model.addAttribute(JOBS, jobs);
 		return JOBS;
-
 	}
 
 	/**
@@ -604,7 +615,7 @@ public class RecruitmentController {
 	 */
 	@RequestMapping(value = "/bylocation.htm", method = RequestMethod.POST)
 	public String searchByLocation(
-			@ModelAttribute("jobRequirements4") JobRequirements jobRequirements,
+			@ModelAttribute(JOB_REQUIREMENTS_BY_LOCATION) JobRequirements jobRequirements,
 			Model model) {
 		String jobLocation = jobRequirements.getJobLocation();
 		List<JobRequirements> jobs=null;
@@ -616,7 +627,6 @@ public class RecruitmentController {
 		}
 		model.addAttribute(JOBS, jobs);
 		return JOBS;
-
 	}
 
 	/**
