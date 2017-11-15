@@ -181,7 +181,7 @@ public class RecruitmentController {
 		try {
 			service.getCandidatePersonalDetails(candidateId);
 			model.addAttribute("candPers", null);
-			model.addAttribute(MESSAGE, "Details already inserted,modify them");
+			model.addAttribute(MESSAGE, "Personal Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
 			model.addAttribute("candPers", new CandidatePersonal());
@@ -212,6 +212,8 @@ public class RecruitmentController {
 			return ERROR;
 		}
 		model.addAttribute("candPers", null);
+		model.addAttribute(MESSAGE,
+				"Personal Details successfully inserted !!!");
 		return ADDRESUME;
 	}
 
@@ -229,7 +231,7 @@ public class RecruitmentController {
 		try {
 			service.getCandidateQualificationDetails(candidateId);
 			model.addAttribute("candQual", null);
-			model.addAttribute(MESSAGE, "Details already inserted,modify them");
+			model.addAttribute(MESSAGE, "Qualification Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
 			model.addAttribute("qualifications", Constant.getQualifications());
@@ -255,6 +257,8 @@ public class RecruitmentController {
 		candidateQualifications.setCandidateId(candidateId);
 		try {
 			service.insertCandidateQualificationDetails(candidateQualifications);
+			model.addAttribute(MESSAGE,
+					"Qualification Details successfully inserted !!!");
 			model.addAttribute("candQual", null);
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
@@ -276,7 +280,7 @@ public class RecruitmentController {
 		try {
 			service.getCandidateWorkHistoryDetails(candidateId);
 			model.addAttribute("candWork", null);
-			model.addAttribute(MESSAGE, "Details already inserted,modify them");
+			model.addAttribute(MESSAGE, "Work History Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
 			model.addAttribute("candWork", new CandidateWorkHistory());
@@ -308,6 +312,8 @@ public class RecruitmentController {
 		candidateWorkHistory.setCandidateId(candidateId);
 		try {
 			service.insertCandidateWorkHistoryDetails(candidateWorkHistory);
+			model.addAttribute(MESSAGE,
+					"Work History Details successfully inserted !!!");
 			model.addAttribute("candWork", null);
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
@@ -349,7 +355,7 @@ public class RecruitmentController {
 			model.addAttribute("candPers", candidatePersonal);
 			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
 		} catch (RecruitmentException exception) {
-			model.addAttribute(MESSAGE, "No details found,add them ");
+			model.addAttribute(MESSAGE, "No Personal details found,add them ");
 			return MODIFYRESUME;
 		}
 		return MODIFYRESUME;
@@ -377,6 +383,8 @@ public class RecruitmentController {
 			model.addAttribute(ERROR, exception.getMessage());
 			return ERROR;
 		}
+		model.addAttribute(MESSAGE,
+				"Personal Details successfully modified !!!");
 		model.addAttribute("candPers", null);
 		return MODIFYRESUME;
 	}
@@ -399,7 +407,8 @@ public class RecruitmentController {
 			model.addAttribute("currentYear", LocalDate.now().getYear());
 			model.addAttribute("qualifications", Constant.getQualifications());
 		} catch (RecruitmentException exception) {
-			model.addAttribute(MESSAGE, "No details found,add them ");
+			model.addAttribute(MESSAGE,
+					"No Qualification details found,add them ");
 			return MODIFYRESUME;
 		}
 		return MODIFYRESUME;
@@ -425,6 +434,8 @@ public class RecruitmentController {
 		} catch (RecruitmentException exception) {
 			model.addAttribute(ERROR, exception.getMessage());
 		}
+		model.addAttribute(MESSAGE,
+				"Qualification Details successfully modified !!!");
 		model.addAttribute("candQual", null);
 		return MODIFYRESUME;
 	}
@@ -445,7 +456,8 @@ public class RecruitmentController {
 					.getCandidateWorkHistoryDetails(candidateId);
 			model.addAttribute("candWork", candidateWorkHistory);
 		} catch (RecruitmentException exception) {
-			model.addAttribute(MESSAGE, "No details found,add them ");
+			model.addAttribute(MESSAGE,
+					"No Work History details found,add them ");
 			return MODIFYRESUME;
 		}
 		model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
@@ -479,6 +491,8 @@ public class RecruitmentController {
 			model.addAttribute(ERROR, exception.getMessage());
 			return ERROR;
 		}
+		model.addAttribute(MESSAGE,
+				"Work History Details successfully modified !!!");
 		model.addAttribute("candWork", null);
 		return MODIFYRESUME;
 	}
@@ -516,7 +530,7 @@ public class RecruitmentController {
 			Model model) {
 		String qualificationRequired = jobRequirements
 				.getQualificationRequired();
-		List<JobRequirements> jobs;
+		List<JobRequirements> jobs=null;
 		try {
 			jobs = service.getJobsByQualification(qualificationRequired);
 		} catch (RecruitmentException exception) {
@@ -541,7 +555,7 @@ public class RecruitmentController {
 			@ModelAttribute("jobRequirements2") JobRequirements jobRequirements,
 			Model model) {
 		String positionRequired = jobRequirements.getPositionRequired();
-		List<JobRequirements> jobs;
+		List<JobRequirements> jobs=null;
 		try {
 			jobs = service.getJobsByPosition(positionRequired);
 		} catch (RecruitmentException exception) {
@@ -567,7 +581,7 @@ public class RecruitmentController {
 			@ModelAttribute("jobRequirements3") JobRequirements jobRequirements,
 			Model model) {
 		int experienceRequired = jobRequirements.getExperienceRequired();
-		List<JobRequirements> jobs;
+		List<JobRequirements> jobs=null;
 		try {
 			jobs = service.getJobsByExperience(experienceRequired);
 		} catch (RecruitmentException exception) {
@@ -593,7 +607,7 @@ public class RecruitmentController {
 			@ModelAttribute("jobRequirements4") JobRequirements jobRequirements,
 			Model model) {
 		String jobLocation = jobRequirements.getJobLocation();
-		List<JobRequirements> jobs;
+		List<JobRequirements> jobs=null;
 		try {
 			jobs = service.getJobsByLocation(jobLocation);
 		} catch (RecruitmentException exception) {
