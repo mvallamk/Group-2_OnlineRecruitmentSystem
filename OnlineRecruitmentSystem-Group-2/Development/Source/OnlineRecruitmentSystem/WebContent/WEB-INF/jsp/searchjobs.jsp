@@ -41,12 +41,11 @@ a.two:hover {
 
 		<form:form action="byposition.htm" modelAttribute="jobRequirements2"
 			method="post">
-	
-				
-				<form:label path="positionRequired">
+			
 					By Position:
-				</form:label>
-			<form:input path="positionRequired" pattern="[A-Za-z ]{1,}"></form:input>
+				<form:select path="positionRequired">
+				<form:options items="${positions}" />
+			</form:select>
 			<button type="submit">search</button>
 
 		</form:form>

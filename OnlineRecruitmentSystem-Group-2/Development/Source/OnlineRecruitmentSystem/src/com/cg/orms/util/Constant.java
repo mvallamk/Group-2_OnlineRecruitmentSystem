@@ -36,4 +36,13 @@ public class Constant {
 
 	}
 
+	public static List<String> getPositionRequired() {
+		List<String> positions = new ArrayList<String>();
+		positions.add("SoftwareEngineer");
+		positions.add("SeniorSoftwareEngineer");
+		positions.add("SeniorConsultant");
+		positions.add("Manager");
+		return positions;
+
+	}
 }

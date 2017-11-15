@@ -53,7 +53,9 @@ a.two:hover {
 		</center>
 	</c:if>
 	<h3>
-		<a class="two" href="backtocandidate.htm">Home</a> <a class="two"
+		<a class="two" href="backtocandidate.htm">Home</a>
+		<br/><br/> 
+		<a class="two"
 			href="signout.htm">Sign Out</a>
 	</h3>
 </body>

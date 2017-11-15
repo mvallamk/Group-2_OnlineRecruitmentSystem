@@ -148,7 +148,6 @@ public class RecruitmentController {
 			@ModelAttribute(LOGIN) @Valid Login login, BindingResult result) {
 		if (result.hasErrors()) {
 			model.addAttribute(USERS, Constant.getUsers());
-			model.addAttribute(LOGIN, new Login());
 			return SIGNUP;
 		}
 		try {
@@ -524,6 +523,7 @@ public class RecruitmentController {
 		model.addAttribute(JOB_REQUIREMENTS_BY_LOCATION, new JobRequirements());
 		model.addAttribute("qualifications", Constant.getQualifications());
 		model.addAttribute("cities", Constant.getCities());
+		model.addAttribute("positions", Constant.getPositionRequired());
 		return "searchjobs";
 	}
 
