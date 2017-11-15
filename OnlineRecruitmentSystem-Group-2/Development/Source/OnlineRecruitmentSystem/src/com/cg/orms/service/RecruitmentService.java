@@ -11,14 +11,26 @@ import com.cg.orms.entities.Login;
 import com.cg.orms.exception.RecruitmentException;
 
 public interface RecruitmentService {
-	
-	public boolean validateLoginDetails(String loginId, String password) throws RecruitmentException;
+
+	/**
+	 * Validating the login details entered by the user.
+	 * 
+	 * @param loginId
+	 *            -LoginId entered by the user
+	 * @param password
+	 *            -Password entered by the user
+	 * @throws RecruitmentException
+	 */
+	boolean validateLoginDetails(String loginId, String password)
+			throws RecruitmentException;
 
 	/**
 	 * When the user selects search jobs by qualification in searchjobs.jsp,the
 	 * program is directed here and the list of jobs matching the criteria is
 	 * fetched from database.
 	 * 
+	 * @param qualificationRequired
+	 *            -Qualification selected by the user
 	 * @throws RecruitmentException
 	 */
 	List<JobRequirements> getJobsByQualification(String qualificationRequired)
@@ -29,6 +41,8 @@ public interface RecruitmentService {
 	 * program is directed here and the list of jobs matching the criteria is
 	 * fetched from database.
 	 * 
+	 * @param positionRequired
+	 *            -Position selected by the user
 	 * @throws RecruitmentException
 	 */
 	List<JobRequirements> getJobsByPosition(String positionRequired)
@@ -39,6 +53,8 @@ public interface RecruitmentService {
 	 * program is directed here and the list of jobs matching the criteria is
 	 * fetched from database.
 	 * 
+	 * @param experienceRequired
+	 *            -Experience selected by the user
 	 * @throws RecruitmentException
 	 */
 	List<JobRequirements> getJobsByExperience(int experienceRequired)
@@ -49,6 +65,8 @@ public interface RecruitmentService {
 	 * program is directed here and the list of jobs matching the criteria is
 	 * fetched from database.
 	 * 
+	 * @param jobLocation
+	 *            -Location selected by the user
 	 * @throws RecruitmentException
 	 */
 	List<JobRequirements> getJobsByLocation(String jobLocation)
@@ -57,6 +75,10 @@ public interface RecruitmentService {
 	/**
 	 * When the user selects Apply option in jobs.jsp,the program is directed
 	 * here and the selected job details will be saved into database.
+	 * 
+	 * @param jobApplied
+	 *            -Job applied by the user
+	 * @throws RecruitmentException
 	 */
 	void insertJobApplied(JobApplied jobApplied) throws RecruitmentException;
 
@@ -65,15 +87,19 @@ public interface RecruitmentService {
 	 * saved by this method,but if the user_id is already taken the it throws an
 	 * exception
 	 * 
-	 * @throws Recruitment
-	 *             Exception
+	 * @param signupDetails
+	 *            -Signup details entered by the user
+	 * @throws RecruitmentException
+	 * 
 	 */
 	void signUp(Login signupDetails) throws RecruitmentException;
 
 	/**
-	 * When the user is loging in then this method checks if the credentials are
-	 * valid or not
+	 * When the user is logging in then this method checks if the credentials
+	 * are valid or not
 	 * 
+	 * @param loginId
+	 *            -LoginId entered by the user.
 	 * @throws recruitment
 	 *             Exception
 	 */
@@ -84,10 +110,13 @@ public interface RecruitmentService {
 	 * is directed here and it if there is some error it throws Recruitment
 	 * Exception
 	 * 
+	 * @param candidatePersonalDetails
+	 *            -Candidate personal details entered by the user
 	 * @throws recruitment
 	 *             Exception
 	 */
-	void insertCandidatePersonalDetails(CandidatePersonal candidatePersonalDetails)
+	void insertCandidatePersonalDetails(
+			CandidatePersonal candidatePersonalDetails)
 			throws RecruitmentException;
 
 	/**
@@ -95,10 +124,13 @@ public interface RecruitmentService {
 	 * program is directed here and it if there is some error it throws
 	 * Recruitment Exception
 	 * 
+	 * @param candidateQualificationDetails
+	 *            -Qualification details entered by the user
 	 * @throws recruitment
 	 *             Exception
 	 */
-	void insertCandidateQualificationDetails(CandidateQualifications candidateQualificationDetails)
+	void insertCandidateQualificationDetails(
+			CandidateQualifications candidateQualificationDetails)
 			throws RecruitmentException;
 
 	/**
@@ -106,10 +138,13 @@ public interface RecruitmentService {
 	 * the program is directed here and it if there is some error it throws
 	 * Recruitment Exception
 	 * 
+	 * @param candidateWorkHistoryDetails
+	 *            -Work history details entered by the user
 	 * @throws recruitment
 	 *             Exception
 	 */
-	void insertCandidateWorkHistoryDetails(CandidateWorkHistory candidateWorkHistoryDetails)
+	void insertCandidateWorkHistoryDetails(
+			CandidateWorkHistory candidateWorkHistoryDetails)
 			throws RecruitmentException;
 
 	/**
@@ -117,6 +152,8 @@ public interface RecruitmentService {
 	 * and the personal details are fetched from data base and if it faces an
 	 * error it throws recruitment Exception
 	 * 
+	 * @param candidateId
+	 *            -LoginId entered by the user
 	 * @throws recruitment
 	 *             Exception
 	 */
@@ -128,17 +165,22 @@ public interface RecruitmentService {
 	 * the program is directed here and the modified details are updated here
 	 * and if it faces an error it throws recruitment Exception.
 	 * 
+	 * @param candidatePersonalDetails
+	 *            -Candidate personal details entered by the user
 	 * @throws Recruitment
 	 *             Exception
 	 */
 	CandidatePersonal modifyCandidatePersonalDetails(
-			CandidatePersonal candidatePersonalDetails) throws RecruitmentException;
+			CandidatePersonal candidatePersonalDetails)
+			throws RecruitmentException;
 
 	/**
 	 * * When user selects modify Qualification details the program is directed
 	 * here and the Qualification details are fetched from data base and if it
 	 * faces an error it throws recruitment Exception
 	 * 
+	 * @param candidateId
+	 *            -LoginId entered by the user
 	 * @throws recruitment
 	 *             Exception
 	 */
@@ -150,6 +192,8 @@ public interface RecruitmentService {
 	 * details the program is directed here and the modified details are updated
 	 * here and if it faces an error it throws recruitment Exception.
 	 * 
+	 * @param candidateQualificationDetails
+	 *            -Qualification details entered by the user
 	 * @throws Recruitment
 	 *             Exception
 	 */
@@ -162,6 +206,8 @@ public interface RecruitmentService {
 	 * here and the Work History details are fetched from data base and if it
 	 * faces an error it throws recruitment Exception
 	 * 
+	 * @param candidateId
+	 *            -LoginId entered by the user
 	 * @throws recruitment
 	 *             Exception
 	 */
@@ -173,6 +219,8 @@ public interface RecruitmentService {
 	 * details the program is directed here and the modified details are updated
 	 * here and if it faces an error it throws recruitment Exception.
 	 * 
+	 * @param candidateWorkHistoryDetails
+	 *            -Work history details entered by the user
 	 * @throws Recruitment
 	 *             Exception
 	 */

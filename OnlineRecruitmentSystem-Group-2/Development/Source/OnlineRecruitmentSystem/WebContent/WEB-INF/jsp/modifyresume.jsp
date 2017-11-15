@@ -24,16 +24,13 @@ a.two:hover {
 </head>
 <body background="images/bg1.jpg">
 	<center>
-	<p align="center" style="color: RED">${message}</p>
+		<p align="center" style="color: RED">${message}</p>
 		<h1 style="font-size: 300%; text-align: center">Resume</h1>
-
 		<a class="two" href="modifypersonalform.htm">Modify Personal
 			Details</a>
-
 		<c:if test="${candPers ne null}">
 			<form:form action="modifypersonal.htm" modelAttribute="candPers"
 				method="post">
-
 				<table bgcolor="#E4E47C" align="center" border="1">
 					<tr>
 						<td><form:label path="candidateName">Name</form:label></td>
@@ -41,19 +38,16 @@ a.two:hover {
 								required="required" maxlength="20"></form:input> <form:errors
 								path="candidateName"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td><form:label path="address">Address</form:label></td>
 						<td><form:textarea path="address" required="TRUE" rows="5"
 								size="10"></form:textarea> <form:errors path="address"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td><form:label path="dob">Date of Birth</form:label></td>
 						<td><form:input type="date" path="dob" max="${currentDate}"></form:input>
 							<form:errors path="dob"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td><form:label path="emailId">Email Id</form:label></td>
 						<td><form:input path="emailId"
@@ -61,21 +55,18 @@ a.two:hover {
 								required="TRUE" title="Enter Valid MailId" maxlength="30"></form:input>
 							<form:errors path="emailId"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td><form:label path="contactNumber">Contact Number</form:label></td>
 						<td><form:input path="contactNumber" pattern="[0-9]{10}"
 								required="TRUE" title="Enter a ten digit number"></form:input> <form:errors
 								path="contactNumber"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td><form:label path="maritalStatus">Marital Status</form:label></td>
 						<td><form:radiobutton path="maritalStatus" value="Married" />Married
 							<form:radiobutton path="maritalStatus" value="Unmarried" />Unmarried
 							<form:errors path="maritalStatus"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td><form:label path="gender">Gender</form:label></td>
 						<td><form:radiobutton path="gender" value="Male" />Male <form:radiobutton
@@ -83,27 +74,22 @@ a.two:hover {
 								path="gender" value="Others" />Others <form:errors
 								path="gender"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td><form:label path="passportNumber">Passport Number</form:label></td>
 						<td><form:input path="passportNumber"
 								pattern="^[A-Z]{1}[0-9]{7}$" required="TRUE" title="A1234567"></form:input>
 							<form:errors path="passportNumber"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td></td>
 						<td><button type="submit">Save</button></td>
 					</tr>
 				</table>
-
 			</form:form>
 		</c:if>
-
 		<br> <br> <br> <br> <a class="two"
 			href="modifyqualform.htm">Modify Qualification Details</a>
 		<c:if test="${candQual ne null }">
-
 			<form:form action="modifyqual.htm" modelAttribute="candQual"
 				method="post">
 				<table bgcolor="#E4E47C" cellspacing="5" align="center" border="1">
@@ -115,7 +101,6 @@ a.two:hover {
 						<th><form:label path="yearOfPassing">Year of Passing</form:label></th>
 						<th><form:label path="percentage">Percentage</form:label></th>
 					</tr>
-
 					<tr align=center valign=middle>
 						<td><form:select path="qualificationName">
 								<form:options items="${qualifications}" />
@@ -144,10 +129,8 @@ a.two:hover {
 							type="submit" value="Save" /></td>
 					</tr>
 				</table>
-
 			</form:form>
 		</c:if>
-
 		<br> <br> <br> <br> <a class="two"
 			href="modifyworkhistform.htm">Modify Work History Details</a>
 		<c:if test="${candWork ne null }">
@@ -216,24 +199,18 @@ a.two:hover {
 								required="TRUE" title="Enter a ten digit number" /> <form:errors
 								path="hrRepContactNumber"></form:errors></td>
 					</tr>
-
 					<tr>
 						<td style="text-align: center;" colspan="2"><input
 							type="submit" value="Save" /></td>
 					</tr>
-
-
-
 				</table>
 			</form:form>
 		</c:if>
 	</center>
-
 	<br>
 	<br>
 	<br>
 	<br>
 	<a class="two" href="backtocandidate.htm">Home</a>
-
 </body>
 </html>

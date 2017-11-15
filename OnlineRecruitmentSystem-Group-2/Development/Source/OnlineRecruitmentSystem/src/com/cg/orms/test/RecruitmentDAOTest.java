@@ -23,7 +23,6 @@ import com.cg.orms.entities.Login;
 public class RecruitmentDAOTest {
 	@Mock
 	private EntityManager entityManager;
-
 	@InjectMocks
 	private RecruitmentDAO recruitmentDAOImpl = new RecruitmentDAOImpl();
 

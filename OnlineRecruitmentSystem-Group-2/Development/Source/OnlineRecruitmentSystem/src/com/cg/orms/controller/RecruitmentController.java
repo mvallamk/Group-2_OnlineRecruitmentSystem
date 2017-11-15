@@ -39,22 +39,24 @@ public class RecruitmentController {
 	final String CANDIDATE = "candidate";
 	final String SIGNUP = "signup";
 	final String USERS = "users";
-	final String CANDIDATE_PERSONAL_DETAILS="candPers";
-	final String CANDIDATE_QUALIFICATION_DETAILS="candQual";
-	final String CANDIDATE_WORK_HISTORY_DETAILS="candWork";
-	final String JOB_REQUIREMENTS_BY_QUALIFICATION="jobRequirements1";
-	final String JOB_REQUIREMENTS_BY_LOCATION="jobRequirements2";
-	final String JOB_REQUIREMENTS_BY_POSITION="jobRequirements3";
-	final String JOB_REQUIREMENTS_BY_EXPERIENCE="jobRequirements4";
+	final String CANDIDATE_PERSONAL_DETAILS = "candPers";
+	final String CANDIDATE_QUALIFICATION_DETAILS = "candQual";
+	final String CANDIDATE_WORK_HISTORY_DETAILS = "candWork";
+	final String JOB_REQUIREMENTS_BY_QUALIFICATION = "jobRequirements1";
+	final String JOB_REQUIREMENTS_BY_LOCATION = "jobRequirements2";
+	final String JOB_REQUIREMENTS_BY_POSITION = "jobRequirements3";
+	final String JOB_REQUIREMENTS_BY_EXPERIENCE = "jobRequirements4";
 	String candidateId = null;
 
 	/**
-	 * <p>shows login form to the user</p>
+	 * <p>
+	 * shows login form to the user
+	 * </p>
 	 * 
 	 * From home page when you click on log in user is directed here.
 	 * 
 	 * @param model
-	 * @return login
+	 * @return login.jsp
 	 */
 	@RequestMapping("/showloginform.htm")
 	public String showLoginPage(Model model) {
@@ -63,12 +65,14 @@ public class RecruitmentController {
 	}
 
 	/**
-	 * <p>signs out user</p> 
+	 * <p>
+	 * signs out user
+	 * </p>
 	 * 
 	 * When ever user selects Sign out he will be directed here
 	 * 
 	 * @param model
-	 * @return LOGIN.html
+	 * @return login.jsp
 	 */
 	@RequestMapping("/signout.htm")
 	public String signOut(Model model) {
@@ -80,6 +84,7 @@ public class RecruitmentController {
 	}
 
 	/**
+	 * 
 	 * Fetching the entered login-Id and Password from login.jsp and validating
 	 * the login credentials by checking its availability in database and
 	 * redirecting the program to appropriate jsp page depending upon the type
@@ -87,9 +92,11 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @param loginId
+	 *            - LoginID entered by the user
 	 * @param password
+	 *            - Password entered by the user
 	 * @return success.jsp
-	 * @throws RecruitmentException
+	 * @exception RecruitmentException
 	 */
 	@RequestMapping(value = "/checklogin.htm", method = RequestMethod.POST)
 	public String login(Model model, @RequestParam("loginId") String loginId,
@@ -121,6 +128,10 @@ public class RecruitmentController {
 	}
 
 	/**
+	 * <p>
+	 * shows signup form
+	 * </p>
+	 * 
 	 * Sending the list of, type of users to signup.jsp
 	 * 
 	 * @param model
@@ -139,7 +150,9 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @param login
+	 *            - Signup details entered by user in signup form
 	 * @param result
+	 *            - Binding result
 	 * @exception RecruitmentException
 	 * @return success.jsp/error.jsp
 	 */
@@ -166,7 +179,9 @@ public class RecruitmentController {
 	}
 
 	/**
-	 * <p>shows add resume form to candidate<p>x
+	 * <p>
+	 * shows add resume form to candidate
+	 * <p>
 	 * 
 	 * When the user selects add resume from candidate.jsp the page is
 	 * redirected to addresume.jsp
@@ -180,6 +195,9 @@ public class RecruitmentController {
 	}
 
 	/**
+	 * <p>
+	 * Shows add personal form
+	 * </p>
 	 * When the user clicks on add Personal details in addresume.jsp he is
 	 * redirected here and an object of personal details is sent to
 	 * addresume.jsp
@@ -188,15 +206,16 @@ public class RecruitmentController {
 	 * @return addresume.jsp
 	 */
 	@RequestMapping("/addpersonalform.htm")
-	public String addPersonalForm(Model model) {
-
+	public String showAddPersonalForm(Model model) {
 		try {
 			service.getCandidatePersonalDetails(candidateId);
 			model.addAttribute(CANDIDATE_PERSONAL_DETAILS, null);
-			model.addAttribute(MESSAGE, "Personal Details already inserted,modify them");
+			model.addAttribute(MESSAGE,
+					"Personal Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
-			model.addAttribute(CANDIDATE_PERSONAL_DETAILS, new CandidatePersonal());
+			model.addAttribute(CANDIDATE_PERSONAL_DETAILS,
+					new CandidatePersonal());
 			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
 			return ADDRESUME;
 		}
@@ -208,11 +227,13 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @param candidatePersonal
+	 *            - Personal Details entered by the user
 	 * @exception RecruitmentException
 	 * @return addresume.jsp
 	 */
 	@RequestMapping(value = "/savepersonal.htm"/* , method = RequestMethod.POST */)
-	public String savePersonalDetails(Model model,
+	public String savePersonalDetails(
+			Model model,
 			@ModelAttribute(CANDIDATE_PERSONAL_DETAILS) CandidatePersonal candidatePersonal) {
 		try {
 			Date dateFromPage = candidatePersonal.getDob();
@@ -230,6 +251,9 @@ public class RecruitmentController {
 	}
 
 	/**
+	 * <p>
+	 * shows add qualification form
+	 * </p>
 	 * On clicking add Qualificationdetails in addresume.jsp the page is
 	 * directed here and the personal details are saved and now to add
 	 * qualifications an object of candidateQualifications is sent to
@@ -243,11 +267,13 @@ public class RecruitmentController {
 		try {
 			service.getCandidateQualificationDetails(candidateId);
 			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS, null);
-			model.addAttribute(MESSAGE, "Qualification Details already inserted,modify them");
+			model.addAttribute(MESSAGE,
+					"Qualification Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
 			model.addAttribute("qualifications", Constant.getQualifications());
-			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS, new CandidateQualifications());
+			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS,
+					new CandidateQualifications());
 			model.addAttribute("currentYear", LocalDate.now().getYear());
 			return ADDRESUME;
 		}
@@ -259,6 +285,8 @@ public class RecruitmentController {
 	 * directed to addresume.jsp
 	 * 
 	 * @param model
+	 * @param CandidateQualifications
+	 *            - Candidate Qualifications entered by user
 	 * @exception RecruitmentException
 	 * @return addresume.jsp
 	 */
@@ -280,6 +308,10 @@ public class RecruitmentController {
 	}
 
 	/**
+	 * <p>
+	 * shows add work history form
+	 * </p>
+	 * 
 	 * On clicking add workHistory in addresume.jsp the page is directed here
 	 * and and to add work history an object of candidateWorkHistory is sent to
 	 * addresume.jsp
@@ -292,10 +324,12 @@ public class RecruitmentController {
 		try {
 			service.getCandidateWorkHistoryDetails(candidateId);
 			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS, null);
-			model.addAttribute(MESSAGE, "Work History Details already inserted,modify them");
+			model.addAttribute(MESSAGE,
+					"Work History Details already inserted,modify them");
 			return ADDRESUME;
 		} catch (RecruitmentException exception) {
-			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS, new CandidateWorkHistory());
+			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS,
+					new CandidateWorkHistory());
 			model.addAttribute("currentDate", Date.valueOf(LocalDate.now()));
 			return ADDRESUME;
 		}
@@ -307,6 +341,7 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @param candidateWorkHistory
+	 *            - Candidate Work History Details entered by user
 	 * @exception RecruitmentException
 	 * @return addresume.jsp
 	 */
@@ -334,6 +369,9 @@ public class RecruitmentController {
 	}
 
 	/**
+	 * <p>
+	 * shows candidate modify resume form
+	 * </p>
 	 * When selected modify resume in candidate.jsp page is directed here
 	 * 
 	 * @param model
@@ -356,7 +394,7 @@ public class RecruitmentController {
 	 *
 	 * @param model
 	 * @return modifyresume.jsp
-	 * @throws RecruitmentException
+	 * @exception RecruitmentException
 	 */
 	@RequestMapping("/modifypersonalform.htm")
 	public String modifyPersonalForm(Model model) {
@@ -378,8 +416,9 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @param candidatePersonal
+	 *            -Candidate personal details to be modified
 	 * @return modifyresume.jsp
-	 * @throws RecruitmentException
+	 * @exception RecruitmentException
 	 */
 	@RequestMapping(value = "/modifypersonal.htm", method = RequestMethod.POST)
 	public String modifyPersonal(
@@ -407,14 +446,15 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @return modifyresume.jsp
-	 * @throws RecruitmentException
+	 * @exception RecruitmentException
 	 */
 	@RequestMapping("/modifyqualform.htm")
 	public String modifyQualificationForm(Model model) {
 		try {
 			CandidateQualifications candidateQualification = service
 					.getCandidateQualificationDetails(candidateId);
-			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS, candidateQualification);
+			model.addAttribute(CANDIDATE_QUALIFICATION_DETAILS,
+					candidateQualification);
 			model.addAttribute("currentYear", LocalDate.now().getYear());
 			model.addAttribute("qualifications", Constant.getQualifications());
 		} catch (RecruitmentException exception) {
@@ -432,8 +472,9 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @param candidateQualifications
+	 *            -Candidate qualification details to be modified
 	 * @return modifyresume.jsp
-	 * @throws RecruitmentException
+	 * @exception RecruitmentException
 	 */
 	@RequestMapping(value = "/modifyqual.htm", method = RequestMethod.POST)
 	public String modifyQualifications(
@@ -458,14 +499,15 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @return modifyresume.jsp
-	 * @throws RecruitmentException
+	 * @exception RecruitmentException
 	 */
 	@RequestMapping("/modifyworkhistform.htm")
 	public String modifyWorkHistoryForm(Model model) {
 		try {
 			CandidateWorkHistory candidateWorkHistory = service
 					.getCandidateWorkHistoryDetails(candidateId);
-			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS, candidateWorkHistory);
+			model.addAttribute(CANDIDATE_WORK_HISTORY_DETAILS,
+					candidateWorkHistory);
 		} catch (RecruitmentException exception) {
 			model.addAttribute(MESSAGE,
 					"No Work History details found,add them ");
@@ -482,8 +524,9 @@ public class RecruitmentController {
 	 * 
 	 * @param model
 	 * @param candidateWorkHistoryDetails
+	 *            -Candidate work history details to be modified
 	 * @return modifyresume.jsp
-	 * @throws RecruitmentException
+	 * @exception RecruitmentException
 	 */
 	@RequestMapping(value = "/modifyworkhist.htm", method = RequestMethod.POST)
 	public String modifyQualifications(
@@ -517,9 +560,11 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/search.htm")
 	public String searchBy(Model model) {
-		model.addAttribute(JOB_REQUIREMENTS_BY_QUALIFICATION, new JobRequirements());
+		model.addAttribute(JOB_REQUIREMENTS_BY_QUALIFICATION,
+				new JobRequirements());
 		model.addAttribute(JOB_REQUIREMENTS_BY_POSITION, new JobRequirements());
-		model.addAttribute(JOB_REQUIREMENTS_BY_EXPERIENCE, new JobRequirements());
+		model.addAttribute(JOB_REQUIREMENTS_BY_EXPERIENCE,
+				new JobRequirements());
 		model.addAttribute(JOB_REQUIREMENTS_BY_LOCATION, new JobRequirements());
 		model.addAttribute("qualifications", Constant.getQualifications());
 		model.addAttribute("cities", Constant.getCities());
@@ -533,6 +578,7 @@ public class RecruitmentController {
 	 * matching his selected criteria will be displayed.
 	 * 
 	 * @param jobRequirements
+	 *            -Job requirements containing qualification required
 	 * @param model
 	 * @return jobs.jsp
 	 */
@@ -542,7 +588,7 @@ public class RecruitmentController {
 			Model model) {
 		String qualificationRequired = jobRequirements
 				.getQualificationRequired();
-		List<JobRequirements> jobs=null;
+		List<JobRequirements> jobs = null;
 		try {
 			jobs = service.getJobsByQualification(qualificationRequired);
 		} catch (RecruitmentException exception) {
@@ -559,6 +605,7 @@ public class RecruitmentController {
 	 * selected criteria will be displayed.
 	 * 
 	 * @param jobRequirements
+	 *            -Job requirements containing position required
 	 * @param model
 	 * @return jobs.jsp
 	 */
@@ -567,7 +614,7 @@ public class RecruitmentController {
 			@ModelAttribute(JOB_REQUIREMENTS_BY_POSITION) JobRequirements jobRequirements,
 			Model model) {
 		String positionRequired = jobRequirements.getPositionRequired();
-		List<JobRequirements> jobs=null;
+		List<JobRequirements> jobs = null;
 		try {
 			jobs = service.getJobsByPosition(positionRequired);
 		} catch (RecruitmentException exception) {
@@ -585,6 +632,7 @@ public class RecruitmentController {
 	 * his selected criteria will be displayed.
 	 * 
 	 * @param jobRequirements
+	 *            -Job requirements containing experience required
 	 * @param model
 	 * @return jobs.jsp
 	 */
@@ -593,7 +641,7 @@ public class RecruitmentController {
 			@ModelAttribute(JOB_REQUIREMENTS_BY_EXPERIENCE) JobRequirements jobRequirements,
 			Model model) {
 		int experienceRequired = jobRequirements.getExperienceRequired();
-		List<JobRequirements> jobs=null;
+		List<JobRequirements> jobs = null;
 		try {
 			jobs = service.getJobsByExperience(experienceRequired);
 		} catch (RecruitmentException exception) {
@@ -610,6 +658,7 @@ public class RecruitmentController {
 	 * selected criteria will be displayed.
 	 * 
 	 * @param jobRequirements
+	 *            -Job requirements containing location required
 	 * @param model
 	 * @return jobs.jsp
 	 */
@@ -618,7 +667,7 @@ public class RecruitmentController {
 			@ModelAttribute(JOB_REQUIREMENTS_BY_LOCATION) JobRequirements jobRequirements,
 			Model model) {
 		String jobLocation = jobRequirements.getJobLocation();
-		List<JobRequirements> jobs=null;
+		List<JobRequirements> jobs = null;
 		try {
 			jobs = service.getJobsByLocation(jobLocation);
 		} catch (RecruitmentException exception) {
@@ -634,7 +683,9 @@ public class RecruitmentController {
 	 * program is directed here and the job applied will be saved .
 	 * 
 	 * @param jobID
+	 *            -JobId of the applied job
 	 * @param companyId
+	 *            -CompanyId of the applied job
 	 * @param model
 	 * @return candidate.jsp
 	 */

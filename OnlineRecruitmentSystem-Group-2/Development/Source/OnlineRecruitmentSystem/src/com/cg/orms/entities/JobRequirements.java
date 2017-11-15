@@ -3,47 +3,36 @@ package com.cg.orms.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Job_Requirements")
-@NamedQueries({
-	@NamedQuery(name = "job.getAll", query = "SELECT b FROM JobRequirements b"),
-	@NamedQuery(name = "qual.getAll", query = "SELECT b FROM JobRequirements b where b.qualificationRequired='hsc'"),
-	@NamedQuery(name = "position.getAll", query = "SELECT b FROM JobRequirements b where b.positionRequired='se'"),
-	@NamedQuery(name = "loc.getAll", query = "SELECT b FROM JobRequirements b where b.jobLocation='pune'"),
-	@NamedQuery(name = "exp.getAll", query = "SELECT b FROM JobRequirements b where b.experienceRequired=5")
-	})
-
-public class JobRequirements 
-{
+@Table(name = "Job_Requirements")
+public class JobRequirements {
 	@Id
-	@Column(name="Job_ID")
+	@Column(name = "Job_ID")
 	private String jobID;
-	
-	@Column(name="Company_Id")	
+
+	@Column(name = "Company_Id")
 	private String companyId;
-	
-	@Column(name="Position_Required")
+
+	@Column(name = "Position_Required")
 	private String positionRequired;
-	
-	@Column(name="Number_Required")
+
+	@Column(name = "Number_Required")
 	private int numberRequired;
-	
-	@Column(name="Experience_Required")
+
+	@Column(name = "Experience_Required")
 	private int experienceRequired;
-	
-	@Column(name="Qualification_Required")
+
+	@Column(name = "Qualification_Required")
 	private String qualificationRequired;
-	
-	@Column(name="Job_Location")
+
+	@Column(name = "Job_Location")
 	private String jobLocation;
-	
-	@Column(name="Job_Description")
+
+	@Column(name = "Job_Description")
 	private String jobDescription;
-	
+
 	public JobRequirements() {
 		super();
 	}
@@ -135,8 +124,6 @@ public class JobRequirements
 				+ ", experienceRequired=" + experienceRequired
 				+ ", qualificationRequired=" + qualificationRequired
 				+ ", jobLocation=" + jobLocation + ", jobDescription="
-				+ jobDescription + "]"+"\n";
+				+ jobDescription + "]" + "\n";
 	}
-	
-	
 }

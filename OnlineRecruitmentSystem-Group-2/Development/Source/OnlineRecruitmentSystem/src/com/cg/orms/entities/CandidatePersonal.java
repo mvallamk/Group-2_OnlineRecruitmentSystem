@@ -8,9 +8,7 @@ import javax.persistence.Id;
 
 @Entity
 public class CandidatePersonal implements Serializable {
-
 	private static final long serialVersionUID = -4098198709663149494L;
-
 	@Id
 	private String candidateId;
 	private String candidateName;
@@ -107,5 +105,4 @@ public class CandidatePersonal implements Serializable {
 				+ ", Gender=" + Gender + ", passportNumber=" + passportNumber
 				+ "]" + "\n";
 	}
-
 }

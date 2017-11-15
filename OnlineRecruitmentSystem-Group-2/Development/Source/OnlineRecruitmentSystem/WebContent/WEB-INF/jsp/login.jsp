@@ -8,19 +8,27 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 <style>
-a { font-size:30px; }
-a.two:link {color:#004BAA;}
-a.two:hover {font-size:150%;}
+a {
+	font-size: 30px;
+}
+
+a.two:link {
+	color: #004BAA;
+}
+
+a.two:hover {
+	font-size: 150%;
+}
 </style>
 </head>
 <body background="images/bg1.jpg">
-	<h1 style="text-align:center">Login</h1>
+	<h1 style="text-align: center">Login</h1>
 	<p align="center" style="color: Red">${message}</p>
 	<form action="checklogin.htm" method="post">
 		<table bgcolor="#E4E47C" align="center">
 			<tr>
 				<td>UserName:</td>
-				<td><input type="text" name="loginId"/></td>
+				<td><input type="text" name="loginId" /></td>
 			</tr>
 			<tr>
 				<td>Password:</td>
@@ -33,8 +41,6 @@ a.two:hover {font-size:150%;}
 			</tr>
 		</table>
 	</form>
-
 	<a class="two" href="showsignupform.htm">Signup</a>
-
 </body>
 </html>

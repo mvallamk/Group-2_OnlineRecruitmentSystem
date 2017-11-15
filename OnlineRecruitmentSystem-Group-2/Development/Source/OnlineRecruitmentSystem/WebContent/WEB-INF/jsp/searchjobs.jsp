@@ -25,47 +25,44 @@ a.two:hover {
 	<center>
 		<!-- <h3 align="right"><a href="backtocand.htm">Back</a></h3> -->
 		<h2>Employee Recruitment System: Search Jobs</h2>
-
 		<form:form action="byqualification.htm"
-			modelAttribute="jobRequirements1" method="post">
-		
-				
+			modelAttribute="jobRequirements1" method="post">	
 				By Qualification :
 				<form:select path="qualificationRequired">
 				<form:options items="${qualifications}" />
 			</form:select>
 			<button type="submit">search</button>
-
 		</form:form>
-		<br><br><br><br>
-
+		<br>
+		<br>
+		<br>
+		<br>
 		<form:form action="byposition.htm" modelAttribute="jobRequirements2"
 			method="post">
-			
 					By Position:
 				<form:select path="positionRequired">
 				<form:options items="${positions}" />
 			</form:select>
 			<button type="submit">search</button>
-
 		</form:form>
-		<br><br><br><br>
+		<br>
+		<br>
+		<br>
+		<br>
 		<form:form action="byexperience.htm" modelAttribute="jobRequirements3"
 			method="post">
-
-
 			<form:label path="experienceRequired">
 					By Experience:
 				</form:label>
 			<form:input type="number" path="experienceRequired"></form:input>
 			<button type="submit">search</button>
-
 		</form:form>
-		<br><br><br><br>
+		<br>
+		<br>
+		<br>
+		<br>
 		<form:form action="bylocation.htm" modelAttribute="jobRequirements4"
 			method="post">
-
-
 			<form:label path="jobLocation">
 					By Location:
 				</form:label>
@@ -73,10 +70,8 @@ a.two:hover {
 				<form:options items="${cities}" />
 			</form:select>
 			<button type="submit">search</button>
-
 		</form:form>
 	</center>
-
 	<h3>
 		<a class="two" href="backtocandidate.htm">Home</a>
 	</h3>

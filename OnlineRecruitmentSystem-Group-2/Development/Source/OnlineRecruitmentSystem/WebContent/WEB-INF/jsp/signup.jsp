@@ -8,13 +8,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 <style>
-a { font-size:30px; }
-a.two:link {color:#004BAA;}
-a.two:hover {font-size:150%;}
+a {
+	font-size: 30px;
+}
+
+a.two:link {
+	color: #004BAA;
+}
+
+a.two:hover {
+	font-size: 150%;
+}
 </style>
 </head>
 <body background="images/bg1.jpg">
-	<h1 style="text-align:center">Create Account</h1>
+	<h1 style="text-align: center">Create Account</h1>
 	<p align="center" style="color: Red">${message}</p>
 	<form:form action="checksignup.htm" method="post"
 		modelAttribute="login">
@@ -43,6 +51,8 @@ a.two:hover {font-size:150%;}
 			</tr>
 		</table>
 	</form:form>
-<h3><a class="two" href="showloginform.htm">Back to LogIn</a></h3>
+	<h3>
+		<a class="two" href="showloginform.htm">Back to LogIn</a>
+	</h3>
 </body>
 </html>

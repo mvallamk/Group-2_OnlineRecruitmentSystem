@@ -32,7 +32,6 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 	@Override
 	public boolean validateLoginDetails(String loginId, String password)
 			throws RecruitmentException {
-
 		if (recruitmentDAOImpl.getLoginDetails(loginId) == null)
 			return false;
 		else {

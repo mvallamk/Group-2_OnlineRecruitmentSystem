@@ -10,7 +10,6 @@ public class Constant {
 		users.add("User");
 		users.add("Company");
 		users.add("Admin");
-
 		return users;
 	}
 
@@ -22,7 +21,6 @@ public class Constant {
 		qualifications.add("Diploma");
 		qualifications.add("PG");
 		return qualifications;
-
 	}
 
 	public static List<String> getCities() {
@@ -33,7 +31,6 @@ public class Constant {
 		cities.add("Mumbai");
 		cities.add("Chennai");
 		return cities;
-
 	}
 
 	public static List<String> getPositionRequired() {
@@ -43,6 +40,5 @@ public class Constant {
 		positions.add("SeniorConsultant");
 		positions.add("Manager");
 		return positions;
-
 	}
 }

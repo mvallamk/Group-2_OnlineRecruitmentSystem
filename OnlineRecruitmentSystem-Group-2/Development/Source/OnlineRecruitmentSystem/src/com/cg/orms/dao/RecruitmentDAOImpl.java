@@ -124,13 +124,15 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 		}
 	}
 
-	
-	/**
-	 * When the user registers with valid credentials,the credentials will be saved
-	 * by this method,but if the user_id is already taken the it throws an exception
-	 * @throws Recruitment Exception
-	 */
 	@Override
+	/**
+	 * When the user registers with valid credentials,the credentials will be
+	 * saved by this method,but if the user_id is already taken the it throws an
+	 * exception
+	 * 
+	 * @throws Recruitment
+	 *             Exception
+	 */
 	public void signUp(Login signupDetails) throws RecruitmentException {
 		try {
 			entityManager.persist(signupDetails);
@@ -145,7 +147,7 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 
 	@Override
 	/**
-	 * When the user is loging in then this method checks if the credentials are valid or not
+	 * When the user is logging in then this method checks if the credentials are valid or not
 	 * @throws recruitment Exception
 	 */
 	public Login getLoginDetails(String loginId) throws RecruitmentException {
@@ -216,7 +218,7 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 		} catch (Exception exception) {
 			logger.info("Work History details couldn't be saved");
 			throw new RecruitmentException(
-					"cant insert into candidate Work History");
+					"can't insert into candidate Work History");
 		}
 	}
 
@@ -284,8 +286,7 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 			return candidate;
 		} catch (Exception exception) {
 			logger.info("Qualification details retrieval failed");
-			throw new RecruitmentException(
-					"Cannot fetch Qualification Details");
+			throw new RecruitmentException("Cannot fetch Qualification Details");
 		}
 	}
 
@@ -318,7 +319,6 @@ public class RecruitmentDAOImpl implements RecruitmentDAO {
 	 */
 	public CandidateWorkHistory getCandidateWorkHistoryDetails(
 			String candidateId) throws RecruitmentException {
-
 		try {
 			TypedQuery<CandidateWorkHistory> query = entityManager.createQuery(
 					QueryMapper.getCandidateWorkHistoryDetailsQuery,
