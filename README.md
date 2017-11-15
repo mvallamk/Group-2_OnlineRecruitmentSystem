@@ -23,6 +23,6 @@ Functionality
       This screen shows the existing resume details to the individual user to update existing resume.
   Search jobs :
       This screen allows the individual user to search for jobs based on different criteria.
-  Apply jobs;
+  Apply jobs:
       This screen allows the individual user to apply for a job from the list of displayed jobs.
 
